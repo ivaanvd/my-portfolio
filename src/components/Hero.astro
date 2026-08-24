@@ -1,13 +1,119 @@
+---
+import { Download } from '@lucide/astro';
+---
 <section class="bg-ink text-white min-h-screen">
     <div class="bg-linear-to-b from-black to-ink px-16 py-6">
-    <nav class="flex justify-between items-center font-mono text-sm text-white/60">
-      <span class="text-white font-medium">IV.</span>
-      <div class="flex gap-8">
-        <span class="hover:text-garnet-bright cursor-pointer">Sobre mi</span>
-        <span class="hover:text-garnet-bright cursor-pointer">Specs</span>
-        <span class="hover:text-garnet-bright cursor-pointer">Proyectos</span>
-        <span class="hover:text-garnet-bright cursor-pointer">Contacto</span>
-      </div>
-    </nav>
-  </div>
+        <nav
+            class="flex justify-between items-center font-mono text-sm text-white/60"
+        >
+            <span
+                class="text-white font-normal hover:font-black hover:scale-110 inline-block cursor-pointer transition-all duration-200"
+            >
+                IV.
+            </span>
+            <div class="flex gap-8">
+                <span class="hover:text-garnet-bright cursor-pointer"
+                    >Sobre mi</span
+                >
+                <span class="hover:text-garnet-bright cursor-pointer"
+                    >Stack</span
+                >
+                <span class="hover:text-garnet-bright cursor-pointer"
+                    >Proyectos</span
+                >
+                <span class="hover:text-garnet-bright cursor-pointer"
+                    >Contactame</span
+                >
+            </div>
+        </nav>
+    </div>
+    <div class="px-16 py-10">
+        <div class="flex justify-between font-mono text-xs text-white/60 mb-12">
+            <span>
+                <span
+                    class="inline-block w-1.5 h-1.5 rounded-full bg-garnet-bright mr-2"
+                ></span>
+                LOC: ZARAGOZA
+            </span>
+            <span>STATUS: OPEN_TO_WORK</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-12 items-center my-12">
+            <!-- Columna izquierda: tag + título + botones -->
+            <div>
+                <span
+                    class="inline-block font-mono text-xs text-garnet-bright border border-garnet-dim bg-garnet/10 px-2.5 py-1 rounded mb-5"
+                >
+                    // WELCOME
+                </span>
+
+                <h1
+                    class="font-display font-black text-7xl uppercase leading-none tracking-tight"
+                >
+                    Iván<br />Vayad
+                </h1>
+
+                <p class="font-mono text-garnet-bright text-base mt-4">
+                    Software engineer &mdash; full stack
+                </p>
+
+               <div class="flex gap-3 mt-9">
+                    <a
+                        href="/cv_ivan_vayad.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="font-mono text-sm uppercase tracking-wide bg-garnet text-white px-5 py-3 rounded hover:bg-garnet-bright cursor-pointer inline-flex items-center"
+                    >
+                        VER CURRICULUM
+                    </a>
+
+                    <a
+                        href="/cv_ivan_vayad.pdf"
+                        download="ivan_vayad-cv.pdf"
+                        aria-label="Descargar currículum"
+                        class="font-mono text-sm uppercase tracking-wide border border-white/20 text-white px-5 py-3 rounded hover:bg-white/10 cursor-pointer flex items-center justify-center gap-2 transition-all duration-200"
+                    >
+                        <Download size={16} />
+
+                    </a>
+                </div>
+            </div>
+
+            <!-- Columna derecha: terminal -->
+            <div
+                class="bg-ink-2 border border-white/10 rounded-lg overflow-hidden font-mono text-sm"
+            >
+                <div class="bg-black/30 px-3.5 py-2.5 flex gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-500/20"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500/20"
+                    ></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/20"
+                    ></span>
+                </div>
+                <div class="p-5 text-white/60 leading-relaxed">
+                    <div><span class="text-garnet-bright">$</span> whoami</div>
+                    <div class="text-white">
+                        &gt; ingeniero de software a punto de acabar la carrera
+                    </div>
+                    <div class="mt-2.5">
+                        <span class="text-garnet-bright">$</span> cat focus.txt
+                    </div>
+                    <div class="text-white">
+                        &gt; arquitectura limpia, sistemas performantes
+                    </div>
+                    <div class="mt-2.5">
+                        <span class="text-garnet-bright">$</span> status
+                    </div>
+                    <div class="text-white">
+                        &gt; disponible para trabajar<span
+                            class="inline-block w-1.5 h-3.5 bg-garnet-bright align-middle animate-pulse"
+                        ></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="font-mono text-xs text-white/40 text-right mt-24 mr-16">
+        SCROLL_TO_CONTINUE &darr;
+    </p>
 </section>
