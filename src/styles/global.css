@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0e0b0b;
+  --color-ink-2: #171212;
+  --color-cream: #f4f1ec;
+  --color-garnet: #7a2331;
+  --color-garnet-bright: #9c2b3a;
+  --color-garnet-dim: #4a1620;
+
+  --font-display: "Archivo", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
