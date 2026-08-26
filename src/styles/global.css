@@ -5,6 +5,8 @@
 @import "@fontsource/archivo/900.css";
 @import "@fontsource/jetbrains-mono/400.css";
 @import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/fraunces/600.css";
+@import "@fontsource/fraunces/700.css";
 
 @theme {
   --color-ink: #0e0b0b;
@@ -16,4 +18,195 @@
 
   --font-display: "Archivo", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+  --font-serif: "Fraunces", serif;
+}
+
+/* ---------- Scroll snap ---------- */
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+/* ---------- Keyframe Animations (Generales y Navbar) ---------- */
+@keyframes fade-out { 
+  0% { opacity: 1; } 
+  100% { opacity: 0; } 
+}
+
+@keyframes fade-in { 
+  0% { opacity: 0; } 
+  100% { opacity: 1; } 
+}
+
+@keyframes fade-out-interactive { 
+  0% { opacity: 1; pointer-events: auto; } 
+  99% { pointer-events: auto; }
+  100% { opacity: 0; pointer-events: none; } 
+}
+
+@keyframes fade-in-interactive { 
+  0% { opacity: 0; pointer-events: none; } 
+  1% { pointer-events: auto; }
+  100% { opacity: 1; pointer-events: auto; } 
+}
+
+/* ---------- Navbar fija con crossfade e interactividad encadenada ---------- */
+.navbar-bg-dark {
+  background: linear-gradient(to bottom, black, var(--color-ink));
+  animation: fade-out linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 0dvh 90dvh;
+}
+
+.navbar-bg-light {
+  background: linear-gradient(to bottom, var(--color-cream), transparent);
+  animation: fade-in linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 10dvh 100dvh;
+}
+
+.nav-dark {
+  animation: fade-out-interactive linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 0dvh 90dvh;
+}
+
+.nav-light {
+  animation: fade-in-interactive linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 10dvh 100dvh;
+}
+
+/* ---------- Reveal genérico (etiqueta SEC.01) ---------- */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  animation: reveal-up linear both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+/* ---------- Hero: el bloque de texto sale hacia la izquierda ---------- */
+@keyframes slide-out-left {
+  0% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(-60vw); }
+}
+
+.hero-content {
+  animation: slide-out-left linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 0dvh 90dvh;
+}
+
+/* ---------- About: el título entra desde la izquierda ---------- */
+@keyframes slide-in-left {
+  0% { opacity: 0; transform: translateX(-60vw); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.about-title {
+  animation: slide-in-left linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 15dvh 100dvh;
+}
+
+/* ---------- MorphBox ---------- */
+.morph-box {
+  position: fixed;
+  z-index: 30;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  animation: morph-shape linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 0dvh 100dvh;
+}
+
+@keyframes morph-shape {
+  0% {
+    top: 30vh; left: 58vw; width: 36vw; height: 34vh;
+    border-radius: 0.5rem;
+    background-color: var(--color-ink-2);
+    border-color: rgba(255,255,255,0.1);
+  }
+  100% {
+    top: 38vh; left: 8vw; width: 84vw; height: 52vh;
+    border-radius: 1.25rem;
+    background-color: white;
+    border-color: rgba(14,11,11,0.08);
+  }
+}
+
+.morph-topbar {
+  padding: 10px 14px;
+  display: flex;
+  gap: 6px;
+  animation: topbar-fade linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 0dvh 100dvh;
+}
+
+@keyframes topbar-fade {
+  0% { background-color: rgba(0,0,0,0.25); }
+  100% { background-color: rgba(0,0,0,0.04); }
+}
+
+.morph-topbar .dot { 
+  width: 10px; 
+  height: 10px; 
+  border-radius: 50%; 
+}
+
+.morph-body { 
+  position: relative; 
+  height: calc(100% - 40px); 
+}
+
+.morph-layer { 
+  position: absolute; 
+  inset: 0; 
+  padding: 20px; 
+  color: var(--color-ink); 
+}
+
+.morph-terminal {
+  color: rgba(255,255,255,0.6);
+  animation: fade-out linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 0dvh 45dvh;
+}
+
+.morph-table {
+  padding: 0;
+  animation: fade-in linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 55dvh 100dvh;
+}
+
+.cursor-blink {
+  display: inline-block;
+  width: 7px; 
+  height: 14px;
+  background: var(--color-garnet-bright);
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink { 
+  50% { opacity: 0; } 
+}
+
+/* ---------- Accesibilidad ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  body { scroll-snap-type: none; }
+  .hero-content, .about-title { animation: none; opacity: 1; transform: none; }
+  .morph-box, .morph-topbar, .morph-terminal, .morph-table,
+  .navbar-bg-dark, .navbar-bg-light, .nav-dark, .nav-light { animation: none; }
+  .morph-table { opacity: 1; }
+  .morph-terminal { display: none; }
+  .navbar-bg-light, .nav-light { opacity: 1; pointer-events: auto; }
+  .navbar-bg-dark, .nav-dark { display: none; }
 }

@@ -1,0 +1,43 @@
+---
+import { CodeXml, LayoutPanelTop, Server, Wrench } from '@lucide/astro';
+
+const categories = [
+  { icon: CodeXml, label: 'Languages', items: ['JavaScript (ES6+)', 'TypeScript', 'Python', 'Java'] },
+  { icon: LayoutPanelTop, label: 'Frontend', items: ['React / Next.js', 'Tailwind CSS', 'HTML/CSS', 'Framer Motion'] },
+  { icon: Server, label: 'Backend', items: ['Node.js / Express', 'PostgreSQL', 'MongoDB', 'REST APIs'] },
+  { icon: Wrench, label: 'Tools', items: ['Git & GitHub', 'Docker', 'Figma', 'Jest'] },
+];
+---
+
+<div class="morph-box">
+  <div class="morph-topbar">
+    <span class="dot bg-red-500/40"></span>
+    <span class="dot bg-green-500/40"></span>
+    <span class="dot bg-yellow-500/40"></span>
+  </div>
+
+  <div class="morph-body">
+    <div class="morph-layer morph-terminal font-mono text-sm">
+      <div><span class="text-garnet-bright">$</span> whoami</div>
+      <div>&gt; ingeniero de software a punto de acabar la carrera</div>
+      <div class="mt-2.5"><span class="text-garnet-bright">$</span> cat focus.txt</div>
+      <div>&gt; arquitectura limpia, sistemas performantes</div>
+      <div class="mt-2.5"><span class="text-garnet-bright">$</span> status</div>
+      <div>&gt; disponible para trabajar<span class="cursor-blink"></span></div>
+    </div>
+
+    <div class="morph-layer morph-table grid grid-cols-4 h-full">
+      {categories.map(({ icon: Icon, label, items }) => (
+        <div class="border-r border-ink/10 last:border-r-0 p-5">
+          <div class="flex items-center gap-2 mb-4">
+            <Icon size={15} class="text-garnet" />
+            <span class="font-mono text-xs uppercase tracking-wide font-medium">{label}</span>
+          </div>
+          <ul class="space-y-1.5 text-sm text-ink/70">
+            {items.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
