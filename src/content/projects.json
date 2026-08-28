@@ -1,0 +1,23 @@
+[
+  {
+    "id": "fintech-dashboard",
+    "num": "01",
+    "title": "Fintech Dashboard",
+    "description": "Dashboard de analítica de alto rendimiento para visualización de datos financieros en tiempo real, con actualizaciones a milisegundos.",
+    "tags": ["REACT", "TYPESCRIPT", "D3.JS"]
+  },
+  {
+    "id": "brutalist-ecommerce",
+    "num": "02",
+    "title": "Brutalist E-commerce",
+    "description": "Frontend headless experimental de e-commerce, centrado en tipografía bold y estructuras de grid poco convencionales.",
+    "tags": ["NEXT.JS", "TAILWIND", "STRIPE"]
+  },
+  {
+    "id": "a-darts",
+    "num": "03",
+    "title": "A-Darts",
+    "description": "Sistema de gestión en tiempo real de torneos de dardos de punta de acero.",
+    "tags": ["REACT", "NODE.JS", "POSTGRESQL"]
+  }
+]
