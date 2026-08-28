@@ -28,26 +28,50 @@ html {
 }
 
 /* ---------- Keyframe Animations (Generales y Navbar) ---------- */
-@keyframes fade-out { 
-  0% { opacity: 1; } 
-  100% { opacity: 0; } 
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
-@keyframes fade-in { 
-  0% { opacity: 0; } 
-  100% { opacity: 1; } 
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-@keyframes fade-out-interactive { 
-  0% { opacity: 1; pointer-events: auto; } 
-  99% { pointer-events: auto; }
-  100% { opacity: 0; pointer-events: none; } 
+@keyframes fade-out-interactive {
+  0% {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  99% {
+    pointer-events: auto;
+  }
+  100% {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
-@keyframes fade-in-interactive { 
-  0% { opacity: 0; pointer-events: none; } 
-  1% { pointer-events: auto; }
-  100% { opacity: 1; pointer-events: auto; } 
+@keyframes fade-in-interactive {
+  0% {
+    opacity: 0;
+    pointer-events: none;
+  }
+  1% {
+    pointer-events: auto;
+  }
+  100% {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 /* ---------- Navbar fija con crossfade e interactividad encadenada ---------- */
@@ -79,8 +103,14 @@ html {
 
 /* ---------- Reveal genérico (etiqueta SEC.01) ---------- */
 @keyframes reveal-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .reveal {
@@ -91,8 +121,14 @@ html {
 
 /* ---------- Hero: el bloque de texto sale hacia la izquierda ---------- */
 @keyframes slide-out-left {
-  0% { opacity: 1; transform: translateX(0); }
-  100% { opacity: 0; transform: translateX(-60vw); }
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-60vw);
+  }
 }
 
 .hero-content {
@@ -103,8 +139,14 @@ html {
 
 /* ---------- About: el título entra desde la izquierda ---------- */
 @keyframes slide-in-left {
-  0% { opacity: 0; transform: translateX(-60vw); }
-  100% { opacity: 1; transform: translateX(0); }
+  0% {
+    opacity: 0;
+    transform: translateX(-60vw);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .about-title {
@@ -118,7 +160,7 @@ html {
   position: fixed;
   z-index: 30;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   animation: morph-shape linear both;
   animation-timeline: scroll(root block);
   animation-range: 0dvh 100dvh;
@@ -126,16 +168,22 @@ html {
 
 @keyframes morph-shape {
   0% {
-    top: 30vh; left: 58vw; width: 36vw; height: 34vh;
+    top: 30vh;
+    left: 58vw;
+    width: 36vw;
+    height: 34vh;
     border-radius: 0.5rem;
     background-color: var(--color-ink-2);
-    border-color: rgba(255,255,255,0.1);
+    border-color: rgba(255, 255, 255, 0.1);
   }
   100% {
-    top: 38vh; left: 8vw; width: 84vw; height: 52vh;
+    top: 38vh;
+    left: 8vw;
+    width: 84vw;
+    height: 52vh;
     border-radius: 1.25rem;
     background-color: white;
-    border-color: rgba(14,11,11,0.08);
+    border-color: rgba(14, 11, 11, 0.08);
   }
 }
 
@@ -149,30 +197,34 @@ html {
 }
 
 @keyframes topbar-fade {
-  0% { background-color: rgba(0,0,0,0.25); }
-  100% { background-color: rgba(0,0,0,0.04); }
+  0% {
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
 }
 
-.morph-topbar .dot { 
-  width: 10px; 
-  height: 10px; 
-  border-radius: 50%; 
+.morph-topbar .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
 }
 
-.morph-body { 
-  position: relative; 
-  height: calc(100% - 40px); 
+.morph-body {
+  position: relative;
+  height: calc(100% - 40px);
 }
 
-.morph-layer { 
-  position: absolute; 
-  inset: 0; 
-  padding: 20px; 
-  color: var(--color-ink); 
+.morph-layer {
+  position: absolute;
+  inset: 0;
+  padding: 20px;
+  color: var(--color-ink);
 }
 
 .morph-terminal {
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
   animation: fade-out linear both;
   animation-timeline: scroll(root block);
   animation-range: 0dvh 45dvh;
@@ -187,26 +239,81 @@ html {
 
 .cursor-blink {
   display: inline-block;
-  width: 7px; 
+  width: 7px;
   height: 14px;
   background: var(--color-garnet-bright);
   vertical-align: middle;
   animation: blink 1s step-end infinite;
 }
 
-@keyframes blink { 
-  50% { opacity: 0; } 
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+/* ---------- Preloader Dots ---------- */
+@keyframes dots {
+  0%,
+  20% {
+    content: "";
+  }
+  40% {
+    content: ".";
+  }
+  60% {
+    content: "..";
+  }
+  80%,
+  100% {
+    content: "...";
+  }
+}
+
+.preloader-dots::after {
+  content: "";
+  animation: dots 1.5s infinite;
 }
 
 /* ---------- Accesibilidad ---------- */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  body { scroll-snap-type: none; }
-  .hero-content, .about-title { animation: none; opacity: 1; transform: none; }
-  .morph-box, .morph-topbar, .morph-terminal, .morph-table,
-  .navbar-bg-dark, .navbar-bg-light, .nav-dark, .nav-light { animation: none; }
-  .morph-table { opacity: 1; }
-  .morph-terminal { display: none; }
-  .navbar-bg-light, .nav-light { opacity: 1; pointer-events: auto; }
-  .navbar-bg-dark, .nav-dark { display: none; }
+  html {
+    scroll-behavior: auto;
+  }
+  body {
+    scroll-snap-type: none;
+  }
+  .hero-content,
+  .about-title {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .morph-box,
+  .morph-topbar,
+  .morph-terminal,
+  .morph-table,
+  .navbar-bg-dark,
+  .navbar-bg-light,
+  .nav-dark,
+  .nav-light {
+    animation: none;
+  }
+  .morph-table {
+    opacity: 1;
+  }
+  .morph-terminal {
+    display: none;
+  }
+  .navbar-bg-light,
+  .nav-light {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .navbar-bg-dark,
+  .nav-dark {
+    display: none;
+  }
+  #preloader {
+    display: none !important;
+  }
 }

@@ -1,41 +1,376 @@
 ---
 import { Download } from '@lucide/astro';
 ---
-<section class="bg-ink text-white h-dvh snap-start snap-always px-16 pt-32">
-    <div class="flex justify-between font-mono text-xs text-white/60 mb-12">
+
+<section
+    class="bg-ink text-white h-dvh snap-start snap-always px-16 pt-32 relative overflow-hidden"
+>
+    <!-- Capa de loading -->
+    <div
+        id="hero-loader-bg"
+        class="fixed inset-0 bg-ink z-[100] pointer-events-none"
+    >
+        <p
+            id="hero-loader-text"
+            class="fixed bottom-20 left-1/2 -translate-x-1/2 font-mono text-garnet-bright text-sm tracking-widest"
+        >
+            LOADING<span class="preloader-dots"></span>
+        </p>
+    </div>
+
+    <div
+        id="hero-meta"
+        class="flex justify-between font-mono text-xs text-white/60 mb-12 opacity-0 transition-opacity duration-700"
+    >
         <span>
             <span class="inline-block w-1.5 h-1.5 rounded-full bg-garnet-bright mr-2"></span>
             LOC: ZARAGOZA
         </span>
+
         <span>STATUS: OPEN_TO_WORK</span>
     </div>
 
     <div class="hero-content max-w-xl">
-        <span class="inline-block font-mono text-xs text-garnet-bright border border-garnet-dim bg-garnet/10 px-2.5 py-1 rounded mb-5">
-            // WELCOME
-        </span>
+        <div
+            id="hero-tag"
+            class="opacity-0 transition-opacity duration-700"
+        >
+            <span
+                class="inline-block font-mono text-xs text-garnet-bright border border-garnet-dim bg-garnet/10 px-2.5 py-1 rounded mb-5"
+            >
+                // WELCOME
+            </span>
+        </div>
 
-        <h1 class="font-display font-black text-7xl uppercase leading-none tracking-tight">
-            Iván<br />Vayad
+        <h1
+            id="hero-title"
+            class="font-display font-black text-7xl uppercase leading-none tracking-tight"
+        >
+            <span id="hero-name-ivan">Iván</span>
+            <br />
+            <span id="hero-name-vayad">Vayad</span>
         </h1>
 
-        <p class="font-mono text-garnet-bright text-base mt-4">
-            Software engineer &mdash; full stack
-        </p>
+        <div
+            id="hero-body"
+            class="opacity-0 transition-opacity duration-700"
+        >
+            <p class="font-mono text-garnet-bright text-base mt-4">
+                Software engineer &mdash; full stack
+            </p>
 
-        <div class="flex gap-3 mt-9">
-            <a href="/cv_ivan_vayad.pdf" target="_blank" rel="noopener noreferrer"
-               class="font-mono text-sm uppercase tracking-wide bg-garnet text-white px-5 py-3 rounded hover:bg-garnet-bright cursor-pointer inline-flex items-center">
-                VER CURRICULUM
-            </a>
-            <a href="/cv_ivan_vayad.pdf" download="ivan_vayad-cv.pdf" aria-label="Descargar currículum"
-               class="font-mono text-sm uppercase tracking-wide border border-white/20 text-white px-5 py-3 rounded hover:bg-white/10 cursor-pointer flex items-center justify-center gap-2 transition-all duration-200">
-                <Download size={16} />
-            </a>
+            <div class="flex gap-3 mt-9">
+                <a
+                    href="/cv_ivan_vayad.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-mono text-sm uppercase tracking-wide bg-garnet text-white px-5 py-3 rounded hover:bg-garnet-bright cursor-pointer inline-flex items-center no-underline"
+                >
+                    VER CURRICULUM
+                </a>
+
+                <a
+                    href="/cv_ivan_vayad.pdf"
+                    download="ivan_vayad-cv.pdf"
+                    aria-label="Descargar currículum"
+                    class="font-mono text-sm uppercase tracking-wide border border-white/20 text-white px-5 py-3 rounded hover:bg-white/10 cursor-pointer flex items-center justify-center gap-2 transition-all duration-200 no-underline"
+                >
+                    <Download size={16} />
+                </a>
+            </div>
         </div>
     </div>
 
-    <p class="font-mono text-xs text-white/40 text-right mt-24">
+    <p
+        id="hero-scroll"
+        class="font-mono text-xs text-white/40 text-right mt-24 opacity-0 transition-opacity duration-700"
+    >
         SCROLL_TO_CONTINUE &darr;
     </p>
 </section>
+<script>
+    function triggerHeroIntro() {
+        const loader = document.getElementById('hero-loader-bg');
+        const loaderText = document.getElementById('hero-loader-text');
+
+        const title = document.getElementById('hero-title');
+        const ivan = document.getElementById('hero-name-ivan');
+        const vayad = document.getElementById('hero-name-vayad');
+
+        const heroContent =
+            document.querySelector<HTMLElement>('.hero-content');
+
+        const meta = document.getElementById('hero-meta');
+        const tag = document.getElementById('hero-tag');
+        const body = document.getElementById('hero-body');
+        const scroll = document.getElementById('hero-scroll');
+
+        if (
+            !loader ||
+            !title ||
+            !ivan ||
+            !vayad ||
+            !heroContent
+        ) {
+            return;
+        }
+
+        // Evitar ejecutar la animación dos veces
+        if (loader.dataset.introStarted === 'true') {
+            return;
+        }
+
+        loader.dataset.introStarted = 'true';
+
+        // --------------------------------------------------
+        // 1. Preparar el Hero
+        // --------------------------------------------------
+
+        heroContent.style.animation = 'none';
+        heroContent.style.transform = 'none';
+        heroContent.style.opacity = '1';
+
+        heroContent.getBoundingClientRect();
+
+        // --------------------------------------------------
+        // 2. Guardar las posiciones REALES de cada palabra
+        // --------------------------------------------------
+
+        const ivanRect = ivan.getBoundingClientRect();
+        const vayadRect = vayad.getBoundingClientRect();
+
+        const finalIvan = {
+            left: ivanRect.left,
+            top: ivanRect.top,
+        };
+
+        const finalVayad = {
+            left: vayadRect.left,
+            top: vayadRect.top,
+        };
+
+        // --------------------------------------------------
+        // 3. Convertimos las palabras en elementos fixed
+        // --------------------------------------------------
+
+        ivan.style.position = 'fixed';
+        ivan.style.zIndex = '110';
+        ivan.style.margin = '0';
+
+        vayad.style.position = 'fixed';
+        vayad.style.zIndex = '110';
+        vayad.style.margin = '0';
+
+        /*
+         * Usamos el tamaño real de cada palabra.
+         */
+        ivan.style.width = `${ivanRect.width}px`;
+        ivan.style.height = `${ivanRect.height}px`;
+
+        vayad.style.width = `${vayadRect.width}px`;
+        vayad.style.height = `${vayadRect.height}px`;
+
+        /*
+         * Centro horizontal de cada palabra.
+         */
+        ivan.style.left = '50%';
+        vayad.style.left = '50%';
+
+        /*
+         * Centro vertical del conjunto.
+         *
+         * Calculamos el alto total de las dos palabras
+         * para que el nombre completo quede centrado.
+         */
+        const totalHeight =
+            ivanRect.height +
+            vayadRect.height;
+
+        const gap = 0;
+
+        const startTop =
+            (window.innerHeight - totalHeight - gap) / 2;
+
+        ivan.style.top = `${startTop}px`;
+
+        vayad.style.top =
+            `${startTop + ivanRect.height + gap}px`;
+
+        /*
+         * Cada palabra se centra sobre sí misma.
+         */
+        ivan.style.transform = 'translateX(-50%)';
+        vayad.style.transform = 'translateX(-50%)';
+
+        /*
+         * Todavía sin transición.
+         */
+        ivan.style.transition = 'none';
+        vayad.style.transition = 'none';
+
+        // Forzar layout
+        ivan.getBoundingClientRect();
+        vayad.getBoundingClientRect();
+
+        // --------------------------------------------------
+        // 4. Loading
+        // --------------------------------------------------
+
+        setTimeout(() => {
+
+            // Ocultar LOADING...
+            loaderText?.classList.add('loader-text-out');
+
+            // --------------------------------------------------
+            // 5. Animar Iván
+            // --------------------------------------------------
+
+            ivan.style.transition = `
+                left 1100ms cubic-bezier(0.16, 1, 0.3, 1),
+                top 1100ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1100ms cubic-bezier(0.16, 1, 0.3, 1)
+            `;
+
+            ivan.style.left = `${finalIvan.left}px`;
+            ivan.style.top = `${finalIvan.top}px`;
+            ivan.style.transform = 'translateX(0)';
+
+            // --------------------------------------------------
+            // 6. Animar Vayad
+            // --------------------------------------------------
+
+            vayad.style.transition = `
+                left 1100ms cubic-bezier(0.16, 1, 0.3, 1),
+                top 1100ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1100ms cubic-bezier(0.16, 1, 0.3, 1)
+            `;
+
+            vayad.style.left = `${finalVayad.left}px`;
+            vayad.style.top = `${finalVayad.top}px`;
+            vayad.style.transform = 'translateX(0)';
+
+            // --------------------------------------------------
+            // 7. Cuando termina la animación
+            // --------------------------------------------------
+
+            setTimeout(() => {
+
+                loader.classList.add('loader-bg-out');
+
+                setTimeout(() => {
+
+                    // --------------------------------------------------
+                    // 8. Restaurar Iván
+                    // --------------------------------------------------
+
+                    ivan.style.position = '';
+                    ivan.style.zIndex = '';
+                    ivan.style.left = '';
+                    ivan.style.top = '';
+                    ivan.style.width = '';
+                    ivan.style.height = '';
+                    ivan.style.margin = '';
+                    ivan.style.transition = '';
+                    ivan.style.transform = '';
+
+                    // --------------------------------------------------
+                    // 9. Restaurar Vayad
+                    // --------------------------------------------------
+
+                    vayad.style.position = '';
+                    vayad.style.zIndex = '';
+                    vayad.style.left = '';
+                    vayad.style.top = '';
+                    vayad.style.width = '';
+                    vayad.style.height = '';
+                    vayad.style.margin = '';
+                    vayad.style.transition = '';
+                    vayad.style.transform = '';
+
+                    // --------------------------------------------------
+                    // 10. Mostrar contenido
+                    // --------------------------------------------------
+
+                    meta?.classList.remove('opacity-0');
+                    tag?.classList.remove('opacity-0');
+                    body?.classList.remove('opacity-0');
+                    scroll?.classList.remove('opacity-0');
+
+                    // --------------------------------------------------
+                    // 11. Restaurar animación del Hero
+                    // --------------------------------------------------
+
+                    heroContent.style.animation = '';
+                    heroContent.style.transform = '';
+                    heroContent.style.opacity = '';
+
+                    loader.style.display = 'none';
+
+                }, 700);
+
+            }, 1100);
+
+        }, 1800);
+    }
+
+    // ==========================================================
+    // ASTRO
+    // ==========================================================
+
+    document.addEventListener(
+        'astro:page-load',
+        triggerHeroIntro
+    );
+
+    if (
+        document.readyState === 'complete' ||
+        document.readyState === 'interactive'
+    ) {
+        triggerHeroIntro();
+    } else {
+        document.addEventListener(
+            'DOMContentLoaded',
+            triggerHeroIntro,
+            { once: true }
+        );
+    }
+</script>
+
+<style>
+    #hero-title {
+        will-change: left, top;
+    }
+
+    #hero-loader-bg {
+        opacity: 1;
+        transition: opacity 700ms ease;
+    }
+
+    #hero-loader-bg.loader-bg-out {
+        opacity: 0;
+    }
+
+    #hero-loader-text {
+        opacity: 1;
+        transition: opacity 400ms ease;
+    }
+
+    #hero-loader-text.loader-text-out {
+        opacity: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        #hero-title {
+            position: static !important;
+            left: auto !important;
+            top: auto !important;
+            width: auto !important;
+            height: auto !important;
+            transition: none !important;
+        }
+
+        #hero-loader-bg {
+            display: none !important;
+        }
+    }
+</style>

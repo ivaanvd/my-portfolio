@@ -17,13 +17,9 @@ const categories = [
   </div>
 
   <div class="morph-body">
-    <div class="morph-layer morph-terminal font-mono text-sm">
-      <div><span class="text-garnet-bright">$</span> whoami</div>
-      <div>&gt; ingeniero de software a punto de acabar la carrera</div>
-      <div class="mt-2.5"><span class="text-garnet-bright">$</span> cat focus.txt</div>
-      <div>&gt; arquitectura limpia, sistemas performantes</div>
-      <div class="mt-2.5"><span class="text-garnet-bright">$</span> status</div>
-      <div>&gt; disponible para trabajar<span class="cursor-blink"></span></div>
+    <!-- El contenedor usa la animación de fade-out definida en tu CSS global al hacer scroll -->
+    <div class="morph-layer morph-terminal font-mono text-sm overflow-hidden" id="terminal-content">
+      <span class="cursor-blink"></span>
     </div>
 
     <div class="morph-layer morph-table grid grid-cols-4 h-full">
@@ -41,3 +37,79 @@ const categories = [
     </div>
   </div>
 </div>
+
+<script>
+  interface CommandStep {
+    type: 'command' | 'output';
+    text: string;
+    delayBefore?: number;
+  }
+
+  const steps: CommandStep[] = [
+    { type: 'command', text: 'whoami' },
+    { type: 'output', text: '> ingeniero de software a punto de acabar la carrera' },
+    { type: 'command', text: 'cat focus.txt', delayBefore: 350 },
+    { type: 'output', text: '> arquitectura limpia, sistemas performantes' },
+    { type: 'command', text: 'status', delayBefore: 350 },
+    { type: 'output', text: '> disponible para trabajar' }
+  ];
+
+  const container = document.getElementById('terminal-content');
+
+  async function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function runTypewriter() {
+    if (!container) return;
+    
+    // Obtenemos o creamos la marca de cursor dentro del contenedor
+    let cursor = container.querySelector('.cursor-blink');
+    if (!cursor) {
+      cursor = document.createElement('span');
+      cursor.className = 'cursor-blink';
+      container.appendChild(cursor);
+    }
+
+    for (const step of steps) {
+      if (step.delayBefore) await sleep(step.delayBefore);
+
+      const line = document.createElement('div');
+
+      if (step.type === 'command') {
+        if (container.children.length > 1) line.classList.add('mt-2.5');
+        
+        const prompt = document.createElement('span');
+        prompt.className = 'text-garnet-bright';
+        prompt.textContent = '$ ';
+        line.appendChild(prompt);
+
+        const textNode = document.createElement('span');
+        textNode.className = 'text-white/90';
+        line.appendChild(textNode);
+
+        container.insertBefore(line, cursor);
+
+        // Tipeado carácter a carácter con variación aleatoria
+        for (let i = 0; i < step.text.length; i++) {
+          textNode.textContent += step.text[i];
+          await sleep(40 + Math.random() * 35);
+        }
+      } else {
+        // Pausa breve de "ejecución de comando"
+        await sleep(180);
+        line.textContent = step.text;
+        line.className = 'text-white/60';
+        container.insertBefore(line, cursor);
+      }
+    }
+  }
+
+  // Soporte para Astro View Transitions / Carga inicial
+  document.addEventListener('astro:page-load', runTypewriter, { once: true });
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    runTypewriter();
+  } else {
+    document.addEventListener('DOMContentLoaded', runTypewriter, { once: true });
+  }
+</script>

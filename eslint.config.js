@@ -1,10 +1,19 @@
 import eslintPluginAstro from 'eslint-plugin-astro';
+import tsParser from '@typescript-eslint/parser';
 
 export default [
-  // Ignorar carpetas globales
   {
-    ignores: ['dist/', '.astro/', 'node_modules/']
+    ignores: ['dist/', '.astro/', 'node_modules/'],
   },
-  // Configuración de reglas normal...
+
   ...eslintPluginAstro.configs.recommended,
+
+  {
+    files: ['**/*.astro'],
+    languageOptions: {
+      parserOptions: {
+        parser: tsParser,
+      },
+    },
+  },
 ];
