@@ -1,10 +1,13 @@
 @import "tailwindcss";
+
 @import "@fontsource/archivo/400.css";
 @import "@fontsource/archivo/500.css";
 @import "@fontsource/archivo/700.css";
 @import "@fontsource/archivo/900.css";
+
 @import "@fontsource/jetbrains-mono/400.css";
 @import "@fontsource/jetbrains-mono/500.css";
+
 @import "@fontsource/fraunces/600.css";
 @import "@fontsource/fraunces/700.css";
 
@@ -21,188 +24,102 @@
   --font-serif: "Fraunces", serif;
 }
 
-/* ---------- Scroll snap ---------- */
+/* =========================================================
+   BASE & LENIS SMOOTH SCROLL
+   ========================================================= */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 html {
-  scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+  background-color: var(--color-ink);
+  color: white;
 }
 
-/* ---------- Keyframe Animations (Generales y Navbar) ---------- */
-@keyframes fade-out {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+body {
+  margin: 0;
+  overflow-x: hidden;
 }
 
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-garnet-bright);
 }
 
-@keyframes fade-out-interactive {
-  0% {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  99% {
-    pointer-events: auto;
-  }
-  100% {
-    opacity: 0;
-    pointer-events: none;
-  }
+/* =========================================================
+   NAVBAR TRANSITIONS
+   ========================================================= */
+
+.navbar-wrap {
+  transition:
+    background-color 0.4s ease,
+    border-color 0.4s ease,
+    backdrop-filter 0.4s ease;
 }
 
-@keyframes fade-in-interactive {
-  0% {
-    opacity: 0;
-    pointer-events: none;
-  }
-  1% {
-    pointer-events: auto;
-  }
-  100% {
-    opacity: 1;
-    pointer-events: auto;
-  }
+.navbar-wrap.is-light {
+  background-color: rgba(244, 241, 236, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(14, 11, 11, 0.08);
+  color: var(--color-ink);
 }
 
-/* ---------- Navbar fija con crossfade e interactividad encadenada ---------- */
-.navbar-bg-dark {
-  background: linear-gradient(to bottom, black, var(--color-ink));
-  animation: fade-out linear both;
-  animation-timeline: scroll(root block);
-  animation-range: 0dvh 90dvh;
+.navbar-wrap.is-dark {
+  background-color: rgba(14, 11, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: white;
 }
 
-.navbar-bg-light {
-  background: linear-gradient(to bottom, var(--color-cream), transparent);
-  animation: fade-in linear both;
-  animation-timeline: scroll(root block);
-  animation-range: 10dvh 100dvh;
-}
+/* =========================================================
+   MORPH BOX STYLES
+   ========================================================= */
 
-.nav-dark {
-  animation: fade-out-interactive linear both;
-  animation-timeline: scroll(root block);
-  animation-range: 0dvh 90dvh;
-}
-
-.nav-light {
-  animation: fade-in-interactive linear both;
-  animation-timeline: scroll(root block);
-  animation-range: 10dvh 100dvh;
-}
-
-/* ---------- Reveal genérico (etiqueta SEC.01) ---------- */
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.reveal {
-  animation: reveal-up linear both;
-  animation-timeline: view();
-  animation-range: entry 0% cover 40%;
-}
-
-/* ---------- Hero: el bloque de texto sale hacia la izquierda ---------- */
-@keyframes slide-out-left {
-  0% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-60vw);
-  }
-}
-
-.hero-content {
-  animation: slide-out-left linear both;
-  animation-timeline: scroll(root block);
-  animation-range: 0dvh 90dvh;
-}
-
-/* ---------- About: el título entra desde la izquierda ---------- */
-@keyframes slide-in-left {
-  0% {
-    opacity: 0;
-    transform: translateX(-60vw);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.about-title {
-  animation: slide-in-left linear both;
-  animation-timeline: scroll(root block);
-  animation-range: 15dvh 100dvh;
-}
-
-/* ---------- MorphBox ---------- */
 .morph-box {
   position: fixed;
   z-index: 30;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  animation: morph-shape linear both;
-  animation-timeline: scroll(root block);
-  animation-range: 0dvh 100dvh;
-}
-
-@keyframes morph-shape {
-  0% {
-    top: 30vh;
-    left: 58vw;
-    width: 36vw;
-    height: 34vh;
-    border-radius: 0.5rem;
-    background-color: var(--color-ink-2);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  100% {
-    top: 38vh;
-    left: 8vw;
-    width: 84vw;
-    height: 52vh;
-    border-radius: 1.25rem;
-    background-color: white;
-    border-color: rgba(14, 11, 11, 0.08);
-  }
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.4s ease;
+  will-change:
+    transform, width, height, top, left, border-radius, background-color;
 }
 
 .morph-topbar {
-  padding: 10px 14px;
   display: flex;
-  gap: 6px;
-  animation: topbar-fade linear both;
-  animation-timeline: scroll(root block);
-  animation-range: 0dvh 100dvh;
-}
-
-@keyframes topbar-fade {
-  0% {
-    background-color: rgba(0, 0, 0, 0.25);
-  }
-  100% {
-    background-color: rgba(0, 0, 0, 0.04);
-  }
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  transition: background-color 0.4s ease;
 }
 
 .morph-topbar .dot {
@@ -213,34 +130,42 @@ html {
 
 .morph-body {
   position: relative;
-  height: calc(100% - 40px);
+  height: calc(100% - 44px);
+  overflow: hidden;
 }
 
 .morph-layer {
   position: absolute;
   inset: 0;
   padding: 20px;
-  color: var(--color-ink);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
 }
 
 .morph-terminal {
-  color: rgba(255, 255, 255, 0.6);
-  animation: fade-out linear both;
-  animation-timeline: scroll(root block);
-  animation-range: 0dvh 45dvh;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .morph-table {
-  padding: 0;
-  animation: fade-in linear both;
-  animation-timeline: scroll(root block);
-  animation-range: 55dvh 100dvh;
+  color: var(--color-ink);
 }
 
+/* Terminal Input Line */
+.terminal-input-prompt {
+  outline: none;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  width: 100%;
+}
+
+/* CURSOR BLINK */
 .cursor-blink {
   display: inline-block;
-  width: 7px;
-  height: 14px;
+  width: 8px;
+  height: 16px;
   background: var(--color-garnet-bright);
   vertical-align: middle;
   animation: blink 1s step-end infinite;
@@ -251,7 +176,30 @@ html {
     opacity: 0;
   }
 }
-/* ---------- Preloader Dots ---------- */
+
+/* =========================================================
+   PROJECT CARD 3D TILT
+   ========================================================= */
+
+.project-card-container {
+  perspective: 1000px;
+}
+
+.project-card-tilt {
+  transition:
+    transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 0.25s ease;
+  transform-style: preserve-3d;
+}
+
+.project-card-tilt:hover {
+  box-shadow: 0 15px 35px rgba(156, 43, 58, 0.2);
+}
+
+/* =========================================================
+   PRELOADER DOTS
+   ========================================================= */
+
 @keyframes dots {
   0%,
   20% {
@@ -274,46 +222,16 @@ html {
   animation: dots 1.5s infinite;
 }
 
-/* ---------- Accesibilidad ---------- */
+/* =========================================================
+   ACCESIBILIDAD
+   ========================================================= */
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  body {
-    scroll-snap-type: none;
-  }
-  .hero-content,
-  .about-title {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  .morph-box,
-  .morph-topbar,
-  .morph-terminal,
-  .morph-table,
-  .navbar-bg-dark,
-  .navbar-bg-light,
-  .nav-dark,
-  .nav-light {
-    animation: none;
-  }
-  .morph-table {
-    opacity: 1;
-  }
-  .morph-terminal {
-    display: none;
-  }
-  .navbar-bg-light,
-  .nav-light {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .navbar-bg-dark,
-  .nav-dark {
-    display: none;
-  }
-  #preloader {
-    display: none !important;
+
+  .morph-box {
+    transition: none !important;
   }
 }

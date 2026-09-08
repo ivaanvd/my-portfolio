@@ -3,16 +3,20 @@ import { Download } from '@lucide/astro';
 ---
 
 <section
-    class="bg-ink text-white h-dvh snap-start snap-always px-16 pt-32 relative overflow-hidden"
+    id="hero-section"
+    class="bg-ink text-white h-dvh px-6 md:px-16 pt-28 md:pt-32 relative overflow-hidden flex flex-col justify-between pb-12"
 >
     <!-- Capa de loading -->
     <div
         id="hero-loader-bg"
-        class="fixed inset-0 bg-ink z-100 pointer-events-none"
+        class="fixed inset-0 bg-ink z-50 pointer-events-none flex flex-col items-center justify-center"
     >
+        <div id="hero-loader-brand" class="font-display font-black text-5xl md:text-8xl tracking-tight text-white mb-8 text-center opacity-0 scale-95">
+            IVÁN VAYAD
+        </div>
         <p
             id="hero-loader-text"
-            class="fixed bottom-20 left-1/2 -translate-x-1/2 font-mono text-garnet-bright text-sm tracking-widest"
+            class="font-mono text-garnet-bright text-xs md:text-sm tracking-widest uppercase"
         >
             LOADING<span class="preloader-dots"></span>
         </p>
@@ -20,23 +24,20 @@ import { Download } from '@lucide/astro';
 
     <div
         id="hero-meta"
-        class="flex justify-between font-mono text-xs text-white/60 mb-12 opacity-0 transition-opacity duration-700"
+        class="flex justify-between font-mono text-xs text-white/60 mb-6 md:mb-12 opacity-0"
     >
-        <span>
-            <span class="inline-block w-1.5 h-1.5 rounded-full bg-garnet-bright mr-2"></span>
+        <span class="flex items-center">
+            <span class="inline-block w-2 h-2 rounded-full bg-garnet-bright mr-2 animate-pulse"></span>
             LOC: ZARAGOZA
         </span>
 
         <span>STATUS: OPEN_TO_WORK</span>
     </div>
 
-    <div class="hero-content max-w-xl">
-        <div
-            id="hero-tag"
-            class="opacity-0 transition-opacity duration-700"
-        >
+    <div class="hero-content max-w-xl my-auto">
+        <div id="hero-tag" class="opacity-0">
             <span
-                class="inline-block font-mono text-xs text-garnet-bright border border-garnet-dim bg-garnet/10 px-2.5 py-1 rounded mb-5"
+                class="inline-block font-mono text-xs text-garnet-bright border border-garnet-dim bg-garnet/10 px-3 py-1.5 rounded mb-5"
             >
                 // WELCOME
             </span>
@@ -44,27 +45,24 @@ import { Download } from '@lucide/astro';
 
         <h1
             id="hero-title"
-            class="font-display font-black text-7xl uppercase leading-none tracking-tight"
+            class="font-display font-black text-5xl sm:text-7xl md:text-8xl uppercase leading-none tracking-tight overflow-hidden"
         >
-            <span id="hero-name-ivan">Iván</span>
+            <span id="hero-name-ivan" class="inline-block">Iván</span>
             <br />
-            <span id="hero-name-vayad">Vayad</span>
+            <span id="hero-name-vayad" class="inline-block">Vayad</span>
         </h1>
 
-        <div
-            id="hero-body"
-            class="opacity-0 transition-opacity duration-700"
-        >
-            <p class="font-mono text-garnet-bright text-base mt-4">
+        <div id="hero-body" class="opacity-0">
+            <p class="font-mono text-garnet-bright text-base md:text-lg mt-4">
                 Software engineer &mdash; full stack
             </p>
 
-            <div class="flex gap-3 mt-9">
+            <div class="flex flex-wrap gap-3 mt-8">
                 <a
                     href="/cv_ivan_vayad.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="font-mono text-sm uppercase tracking-wide bg-garnet text-white px-5 py-3 rounded hover:bg-garnet-bright cursor-pointer inline-flex items-center no-underline"
+                    class="font-mono text-xs md:text-sm uppercase tracking-wide bg-garnet text-white px-6 py-3.5 rounded hover:bg-garnet-bright transition-all duration-200 cursor-pointer inline-flex items-center no-underline shadow-lg hover:shadow-garnet/40"
                 >
                     VER CURRICULUM
                 </a>
@@ -73,7 +71,7 @@ import { Download } from '@lucide/astro';
                     href="/cv_ivan_vayad.pdf"
                     download="ivan_vayad-cv.pdf"
                     aria-label="Descargar currículum"
-                    class="font-mono text-sm uppercase tracking-wide border border-white/20 text-white px-5 py-3 rounded hover:bg-white/10 cursor-pointer flex items-center justify-center gap-2 transition-all duration-200 no-underline"
+                    class="font-mono text-xs md:text-sm uppercase tracking-wide border border-white/20 text-white px-5 py-3.5 rounded hover:bg-white/10 cursor-pointer flex items-center justify-center gap-2 transition-all duration-200 no-underline"
                 >
                     <Download size={16} />
                 </a>
@@ -83,294 +81,88 @@ import { Download } from '@lucide/astro';
 
     <p
         id="hero-scroll"
-        class="font-mono text-xs text-white/40 text-right mt-24 opacity-0 transition-opacity duration-700"
+        class="font-mono text-xs text-white/40 text-right opacity-0"
     >
         SCROLL_TO_CONTINUE &darr;
     </p>
 </section>
-<script>
-    function triggerHeroIntro() {
-        const loader = document.getElementById('hero-loader-bg');
-        const loaderText = document.getElementById('hero-loader-text');
 
-        const title = document.getElementById('hero-title');
+<script>
+    import { gsap } from 'gsap';
+
+    function triggerHeroIntro() {
+        const loaderBg = document.getElementById('hero-loader-bg');
+        const loaderBrand = document.getElementById('hero-loader-brand');
+        const loaderText = document.getElementById('hero-loader-text');
+        
         const ivan = document.getElementById('hero-name-ivan');
         const vayad = document.getElementById('hero-name-vayad');
-
-        const heroContent =
-            document.querySelector<HTMLElement>('.hero-content');
-
+        
         const meta = document.getElementById('hero-meta');
         const tag = document.getElementById('hero-tag');
         const body = document.getElementById('hero-body');
         const scroll = document.getElementById('hero-scroll');
 
-        if (
-            !loader ||
-            !title ||
-            !ivan ||
-            !vayad ||
-            !heroContent
-        ) {
-            return;
-        }
+        if (!loaderBg || !ivan || !vayad) return;
 
-        // Evitar ejecutar la animación dos veces
-        if (loader.dataset.introStarted === 'true') {
-            return;
-        }
+        if (loaderBg.dataset.started === 'true') return;
+        loaderBg.dataset.started = 'true';
 
-        loader.dataset.introStarted = 'true';
+        const tl = gsap.timeline({
+            onComplete: () => {
+                if (loaderBg) loaderBg.style.display = 'none';
+            }
+        });
 
-        // --------------------------------------------------
-        // 1. Preparar el Hero
-        // --------------------------------------------------
-
-        heroContent.style.animation = 'none';
-        heroContent.style.transform = 'none';
-        heroContent.style.opacity = '1';
-
-        heroContent.getBoundingClientRect();
-
-        // --------------------------------------------------
-        // 2. Guardar las posiciones REALES de cada palabra
-        // --------------------------------------------------
-
-        const ivanRect = ivan.getBoundingClientRect();
-        const vayadRect = vayad.getBoundingClientRect();
-
-        const finalIvan = {
-            left: ivanRect.left,
-            top: ivanRect.top,
-        };
-
-        const finalVayad = {
-            left: vayadRect.left,
-            top: vayadRect.top,
-        };
-
-        // --------------------------------------------------
-        // 3. Convertimos las palabras en elementos fixed
-        // --------------------------------------------------
-
-        ivan.style.position = 'fixed';
-        ivan.style.zIndex = '110';
-        ivan.style.margin = '0';
-
-        vayad.style.position = 'fixed';
-        vayad.style.zIndex = '110';
-        vayad.style.margin = '0';
-
-        /*
-         * Usamos el tamaño real de cada palabra.
-         */
-        ivan.style.width = `${ivanRect.width}px`;
-        ivan.style.height = `${ivanRect.height}px`;
-
-        vayad.style.width = `${vayadRect.width}px`;
-        vayad.style.height = `${vayadRect.height}px`;
-
-        /*
-         * Centro horizontal de cada palabra.
-         */
-        ivan.style.left = '50%';
-        vayad.style.left = '50%';
-
-        /*
-         * Centro vertical del conjunto.
-         *
-         * Calculamos el alto total de las dos palabras
-         * para que el nombre completo quede centrado.
-         */
-        const totalHeight =
-            ivanRect.height +
-            vayadRect.height;
-
-        const gap = 0;
-
-        const startTop =
-            (window.innerHeight - totalHeight - gap) / 2;
-
-        ivan.style.top = `${startTop}px`;
-
-        vayad.style.top =
-            `${startTop + ivanRect.height + gap}px`;
-
-        /*
-         * Cada palabra se centra sobre sí misma.
-         */
-        ivan.style.transform = 'translateX(-50%)';
-        vayad.style.transform = 'translateX(-50%)';
-
-        /*
-         * Todavía sin transición.
-         */
-        ivan.style.transition = 'none';
-        vayad.style.transition = 'none';
-
-        // Forzar layout
-        ivan.getBoundingClientRect();
-        vayad.getBoundingClientRect();
-
-        // --------------------------------------------------
-        // 4. Loading
-        // --------------------------------------------------
-
-        setTimeout(() => {
-
-            // Ocultar LOADING...
-            loaderText?.classList.add('loader-text-out');
-
-            // --------------------------------------------------
-            // 5. Animar Iván
-            // --------------------------------------------------
-
-            ivan.style.transition = `
-                left 1100ms cubic-bezier(0.16, 1, 0.3, 1),
-                top 1100ms cubic-bezier(0.16, 1, 0.3, 1),
-                transform 1100ms cubic-bezier(0.16, 1, 0.3, 1)
-            `;
-
-            ivan.style.left = `${finalIvan.left}px`;
-            ivan.style.top = `${finalIvan.top}px`;
-            ivan.style.transform = 'translateX(0)';
-
-            // --------------------------------------------------
-            // 6. Animar Vayad
-            // --------------------------------------------------
-
-            vayad.style.transition = `
-                left 1100ms cubic-bezier(0.16, 1, 0.3, 1),
-                top 1100ms cubic-bezier(0.16, 1, 0.3, 1),
-                transform 1100ms cubic-bezier(0.16, 1, 0.3, 1)
-            `;
-
-            vayad.style.left = `${finalVayad.left}px`;
-            vayad.style.top = `${finalVayad.top}px`;
-            vayad.style.transform = 'translateX(0)';
-
-            // --------------------------------------------------
-            // 7. Cuando termina la animación
-            // --------------------------------------------------
-
-            setTimeout(() => {
-
-                loader.classList.add('loader-bg-out');
-
-                setTimeout(() => {
-
-                    // --------------------------------------------------
-                    // 8. Restaurar Iván
-                    // --------------------------------------------------
-
-                    ivan.style.position = '';
-                    ivan.style.zIndex = '';
-                    ivan.style.left = '';
-                    ivan.style.top = '';
-                    ivan.style.width = '';
-                    ivan.style.height = '';
-                    ivan.style.margin = '';
-                    ivan.style.transition = '';
-                    ivan.style.transform = '';
-
-                    // --------------------------------------------------
-                    // 9. Restaurar Vayad
-                    // --------------------------------------------------
-
-                    vayad.style.position = '';
-                    vayad.style.zIndex = '';
-                    vayad.style.left = '';
-                    vayad.style.top = '';
-                    vayad.style.width = '';
-                    vayad.style.height = '';
-                    vayad.style.margin = '';
-                    vayad.style.transition = '';
-                    vayad.style.transform = '';
-
-                    // --------------------------------------------------
-                    // 10. Mostrar contenido
-                    // --------------------------------------------------
-
-                    meta?.classList.remove('opacity-0');
-                    tag?.classList.remove('opacity-0');
-                    body?.classList.remove('opacity-0');
-                    scroll?.classList.remove('opacity-0');
-
-                    // --------------------------------------------------
-                    // 11. Restaurar animación del Hero
-                    // --------------------------------------------------
-
-                    heroContent.style.animation = '';
-                    heroContent.style.transform = '';
-                    heroContent.style.opacity = '';
-
-                    loader.style.display = 'none';
-
-                }, 700);
-
-            }, 1100);
-
-        }, 1800);
+        // 1. Reveal loader brand text
+        tl.to(loaderBrand, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.7,
+            ease: 'power3.out'
+        })
+        .to(loaderText, {
+            opacity: 0,
+            duration: 0.4,
+            delay: 0.5
+        })
+        .to(loaderBrand, {
+            opacity: 0,
+            y: -20,
+            duration: 0.4
+        }, '-=0.2')
+        .to(loaderBg, {
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power2.inOut'
+        })
+        // 2. Animate Hero Title Names
+        .fromTo([ivan, vayad], {
+            y: 80,
+            opacity: 0,
+            rotateX: 30
+        }, {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            duration: 0.9,
+            stagger: 0.15,
+            ease: 'power4.out'
+        }, '-=0.3')
+        // 3. Fade in supporting elements
+        .to([meta, tag, body, scroll], {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'power2.out'
+        }, '-=0.5');
     }
 
-    // ==========================================================
-    // ASTRO
-    // ==========================================================
-
-    document.addEventListener(
-        'astro:page-load',
-        triggerHeroIntro
-    );
-
-    if (
-        document.readyState === 'complete' ||
-        document.readyState === 'interactive'
-    ) {
-        triggerHeroIntro();
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', triggerHeroIntro);
     } else {
-        document.addEventListener(
-            'DOMContentLoaded',
-            triggerHeroIntro,
-            { once: true }
-        );
+        triggerHeroIntro();
     }
+    document.addEventListener('astro:page-load', triggerHeroIntro);
 </script>
-
-<style>
-    #hero-title {
-        will-change: left, top;
-    }
-
-    #hero-loader-bg {
-        opacity: 1;
-        transition: opacity 700ms ease;
-    }
-
-    #hero-loader-bg.loader-bg-out {
-        opacity: 0;
-    }
-
-    #hero-loader-text {
-        opacity: 1;
-        transition: opacity 400ms ease;
-    }
-
-    #hero-loader-text.loader-text-out {
-        opacity: 0;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        #hero-title {
-            position: static !important;
-            left: auto !important;
-            top: auto !important;
-            width: auto !important;
-            height: auto !important;
-            transition: none !important;
-        }
-
-        #hero-loader-bg {
-            display: none !important;
-        }
-    }
-</style>

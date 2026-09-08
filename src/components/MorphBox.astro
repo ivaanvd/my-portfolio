@@ -1,44 +1,112 @@
 ---
-import { CodeXml, LayoutPanelTop, Server, Wrench } from '@lucide/astro';
+import { CodeXml, LayoutPanelTop, Server, Wrench, Terminal as TerminalIcon } from '@lucide/astro';
 
 const categories = [
-  { icon: CodeXml, label: 'Languages', items: ['JavaScript (ES6+)', 'TypeScript', 'Python', 'Java'] },
-  { icon: LayoutPanelTop, label: 'Frontend', items: ['React / Next.js', 'Tailwind CSS', 'HTML/CSS', 'Framer Motion'] },
-  { icon: Server, label: 'Backend', items: ['Node.js / Express', 'PostgreSQL', 'MongoDB', 'REST APIs'] },
-  { icon: Wrench, label: 'Tools', items: ['Git & GitHub', 'Docker', 'Figma', 'Jest'] },
+  {
+    icon: CodeXml,
+    label: 'Languages',
+    items: ['JavaScript (ES6+)', 'TypeScript', 'Python', 'Java'],
+  },
+  {
+    icon: LayoutPanelTop,
+    label: 'Frontend',
+    items: ['React / Next.js', 'Tailwind CSS', 'HTML / CSS', 'Framer Motion'],
+  },
+  {
+    icon: Server,
+    label: 'Backend',
+    items: ['Node.js / Express', 'PostgreSQL', 'MongoDB', 'REST APIs'],
+  },
+  {
+    icon: Wrench,
+    label: 'Tools & DevOps',
+    items: ['Git & GitHub', 'Docker', 'Figma', 'Jest / Testing'],
+  },
 ];
 ---
 
-<div class="morph-box">
-  <div class="morph-topbar">
-    <span class="dot bg-red-500/40"></span>
-    <span class="dot bg-green-500/40"></span>
-    <span class="dot bg-yellow-500/40"></span>
-  </div>
-
-  <div class="morph-body">
-    <!-- El contenedor usa la animación de fade-out definida en tu CSS global al hacer scroll -->
-    <div class="morph-layer morph-terminal font-mono text-sm overflow-hidden" id="terminal-content">
-      <span class="cursor-blink"></span>
+<div id="morph-box" class="morph-box rounded-xl bg-ink-2 border border-white/10 shadow-2xl">
+  <!-- TOPBAR -->
+  <div class="morph-topbar bg-black/30 flex items-center justify-between border-b border-white/5">
+    <div class="flex items-center gap-2">
+      <span class="dot bg-red-500/70"></span>
+      <span class="dot bg-yellow-500/70"></span>
+      <span class="dot bg-green-500/70"></span>
     </div>
 
-    <div class="morph-layer morph-table grid grid-cols-4 h-full">
-      {categories.map(({ icon: Icon, label, items }) => (
-        <div class="border-r border-ink/10 p-5">
-          <div class="flex items-center gap-2 mb-4">
-            <Icon size={15} class="text-garnet" />
-            <span class="font-mono text-xs uppercase tracking-wide font-medium">{label}</span>
+    <div class="flex items-center gap-1.5 font-mono text-[11px] text-white/50">
+      <TerminalIcon size={12} class="text-garnet-bright" />
+      <span id="morph-title">ivan@portfolio:~</span>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="morph-body">
+    <!-- TERMINAL LAYER -->
+    <div
+      class="morph-layer morph-terminal font-mono text-xs md:text-sm overflow-y-auto flex flex-col justify-between"
+      id="terminal-layer"
+      data-lenis-prevent
+    >
+      <div id="terminal-output" class="space-y-2">
+        <!-- Lines injected via JS -->
+      </div>
+
+      <form id="terminal-form" class="flex items-center gap-2 mt-3 pt-2 border-t border-white/10">
+        <span class="text-garnet-bright font-bold">$</span>
+        <input
+          id="terminal-input"
+          type="text"
+          class="terminal-input-prompt font-mono text-xs text-white placeholder-white/30 focus:outline-none"
+          placeholder="Escribe 'help'..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </form>
+    </div>
+
+    <!-- SKILLS GRID LAYER -->
+    <div id="table-layer" class="morph-layer morph-table grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 h-full opacity-0 pointer-events-none transition-opacity duration-300">
+      {
+        categories.map(({ icon: Icon, label, items }) => (
+          <div class="border-b sm:border-b-0 border-r border-ink/10 last:border-r-0 p-4 md:p-6 flex flex-col justify-start">
+            <div class="flex items-center gap-2 mb-4">
+              <Icon size={16} class="text-garnet shrink-0" />
+              <span class="font-mono text-xs uppercase tracking-wider font-semibold text-ink">
+                {label}
+              </span>
+            </div>
+
+            <ul class="space-y-2 text-xs md:text-sm text-ink/75 font-mono">
+              {items.map((item) => (
+                <li class="flex items-center gap-1.5">
+                  <span class="w-1 h-1 rounded-full bg-garnet/60"></span>
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul class="space-y-1.5 text-sm text-ink/70">
-            {items.map((item) => <li>{item}</li>)}
-          </ul>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </div>
 </div>
 
+<style>
+  @media (max-width: 767px) {
+    #morph-box {
+      display: none !important;
+    }
+  }
+</style>
+
 <script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // --- TERMINAL TYPEWRITER & INTERACTIVE PROMPT ---
   interface CommandStep {
     type: 'command' | 'output';
     text: string;
@@ -47,69 +115,256 @@ const categories = [
 
   const steps: CommandStep[] = [
     { type: 'command', text: 'whoami' },
-    { type: 'output', text: '> ingeniero de software a punto de acabar la carrera' },
-    { type: 'command', text: 'cat focus.txt', delayBefore: 350 },
-    { type: 'output', text: '> arquitectura limpia, sistemas performantes' },
-    { type: 'command', text: 'status', delayBefore: 350 },
-    { type: 'output', text: '> disponible para trabajar' }
+    {
+      type: 'output',
+      text: '> Iván Vayad — Software Engineer (Full Stack)',
+    },
+    {
+      type: 'command',
+      text: 'cat focus.txt',
+      delayBefore: 300,
+    },
+    {
+      type: 'output',
+      text: '> Arquitectura limpia, desarrollo web moderno y sistemas performantes.',
+    },
+    {
+      type: 'command',
+      text: 'status',
+      delayBefore: 300,
+    },
+    {
+      type: 'output',
+      text: '> Disponible para trabajar // Open to work',
+    },
   ];
-
-  const container = document.getElementById('terminal-content');
 
   async function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   async function runTypewriter() {
-    if (!container) return;
+    const outputContainer = document.getElementById('terminal-output');
+    if (!outputContainer) return;
     
-    // Obtenemos o creamos la marca de cursor dentro del contenedor
-    let cursor = container.querySelector('.cursor-blink');
-    if (!cursor) {
-      cursor = document.createElement('span');
-      cursor.className = 'cursor-blink';
-      container.appendChild(cursor);
-    }
+    // If output is already filled and dataset is started, don't restart
+    if (outputContainer.children.length > 0 && outputContainer.dataset.started === 'true') return;
+
+    outputContainer.dataset.started = 'true';
+    outputContainer.innerHTML = '';
 
     for (const step of steps) {
-      if (step.delayBefore) await sleep(step.delayBefore);
+      const currentContainer = document.getElementById('terminal-output');
+      if (!currentContainer) break;
+
+      if (step.delayBefore) {
+        await sleep(step.delayBefore);
+      }
 
       const line = document.createElement('div');
 
       if (step.type === 'command') {
-        if (container.children.length > 1) line.classList.add('mt-2.5');
-        
         const prompt = document.createElement('span');
-        prompt.className = 'text-garnet-bright';
-        prompt.textContent = '$ ';
+        prompt.className = 'text-garnet-bright font-bold mr-2';
+        prompt.textContent = '$';
+
         line.appendChild(prompt);
 
         const textNode = document.createElement('span');
-        textNode.className = 'text-white/90';
+        textNode.className = 'text-white/90 font-medium';
         line.appendChild(textNode);
 
-        container.insertBefore(line, cursor);
+        currentContainer.appendChild(line);
 
-        // Tipeado carácter a carácter con variación aleatoria
         for (let i = 0; i < step.text.length; i++) {
           textNode.textContent += step.text[i];
-          await sleep(40 + Math.random() * 35);
+          await sleep(35 + Math.random() * 25);
         }
       } else {
-        // Pausa breve de "ejecución de comando"
-        await sleep(180);
+        await sleep(150);
         line.textContent = step.text;
-        line.className = 'text-white/60';
-        container.insertBefore(line, cursor);
+        line.className = 'text-white/60 pl-4 border-l-2 border-garnet/40';
+        currentContainer.appendChild(line);
       }
+
+      currentContainer.scrollTop = currentContainer.scrollHeight;
     }
   }
 
-  // Soporte para Astro View Transitions / Carga inicial
-  document.addEventListener('astro:page-load', runTypewriter, { once: true });
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    runTypewriter();
-  } else {
-    document.addEventListener('DOMContentLoaded', runTypewriter, { once: true });
+  // Interactive Form Command Handler
+  function handleCommand(cmd: string) {
+    const outputContainer = document.getElementById('terminal-output');
+    if (!outputContainer) return;
+
+    const trimmed = cmd.trim().toLowerCase();
+    
+    // Echo user input
+    const userLine = document.createElement('div');
+    userLine.className = 'mt-2';
+    userLine.innerHTML = `<span class="text-garnet-bright font-bold mr-2">$</span><span class="text-white">${cmd}</span>`;
+    outputContainer.appendChild(userLine);
+
+    const resLine = document.createElement('div');
+    resLine.className = 'text-white/70 pl-4 border-l-2 border-garnet/50 my-1';
+
+    switch (trimmed) {
+      case 'help':
+        resLine.innerHTML = `Comandos disponibles:<br/>
+        - <b class="text-white">whoami</b>: Información profesional<br/>
+        - <b class="text-white">skills</b>: Lista de habilidades principales<br/>
+        - <b class="text-white">projects</b>: Ir a la sección de proyectos<br/>
+        - <b class="text-white">contact</b>: Información de contacto<br/>
+        - <b class="text-white">clear</b>: Limpiar la pantalla`;
+        break;
+      case 'whoami':
+        resLine.textContent = '> Iván Vayad — Software Engineer apasionado por la tecnología y soluciones eficientes.';
+        break;
+      case 'skills':
+      case 'stack':
+        resLine.textContent = '> Stack: TS, React, Next.js, Node.js, Express, PostgreSQL, MongoDB, Tailwind, Docker, Git.';
+        break;
+      case 'projects':
+        resLine.textContent = '> Desplazando a la sección de Proyectos...';
+        document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' });
+        break;
+      case 'contact':
+        resLine.textContent = '> Email: ivanvayad.2004@gmail.com | Ubicación: Zaragoza, España';
+        break;
+      case 'clear':
+        outputContainer.innerHTML = '';
+        return;
+      case '':
+        return;
+      default:
+        resLine.textContent = `> Comando no reconocido: "${cmd}". Escribe 'help' para ver la lista.`;
+        break;
+    }
+
+    outputContainer.appendChild(resLine);
+    outputContainer.scrollTop = outputContainer.scrollHeight;
   }
+
+  // --- GSAP SCROLLTRIGGER MORPHING ---
+  function initMorphScroll() {
+    const morphBox = document.getElementById('morph-box');
+    const heroSection = document.getElementById('hero-section');
+    const aboutSection = document.getElementById('about-section');
+    const projectsSection = document.getElementById('projects-section');
+    const terminalLayer = document.getElementById('terminal-layer');
+    const tableLayer = document.getElementById('table-layer');
+
+    if (!morphBox) return;
+
+    // Completely hide MorphBox on mobile devices (< 768px)
+    if (window.innerWidth < 768) {
+      morphBox.style.display = 'none';
+      return;
+    }
+
+    // If on a page other than Home (no #hero-section or #about-section), hide morphBox
+    if (!heroSection || !aboutSection || !projectsSection) {
+      morphBox.style.display = 'none';
+      return;
+    }
+
+    morphBox.style.display = 'block';
+
+    // Initial desktop position state
+    const initialProps = {
+      top: '28vh',
+      left: '55vw',
+      width: '38vw',
+      height: '42vh',
+      borderRadius: '12px',
+      backgroundColor: '#171212',
+      borderColor: 'rgba(255,255,255,0.1)',
+      opacity: 1,
+      x: 0
+    };
+
+    gsap.set(morphBox, initialProps);
+
+    // Timeline for Hero -> About transition
+    const morphTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: aboutSection,
+        start: 'top 85%',
+        end: 'top 15%',
+        scrub: 1,
+        onUpdate: (self: ScrollTrigger) => {
+          if (self.progress > 0.45) {
+            terminalLayer?.classList.add('opacity-0', 'pointer-events-none');
+            tableLayer?.classList.remove('opacity-0', 'pointer-events-none');
+          } else {
+            terminalLayer?.classList.remove('opacity-0', 'pointer-events-none');
+            tableLayer?.classList.add('opacity-0', 'pointer-events-none');
+          }
+        }
+      }
+    });
+
+    const aboutProps = {
+      top: '46vh',
+      left: '7.5vw',
+      width: '85vw',
+      height: '46vh',
+      borderRadius: '20px',
+      backgroundColor: '#ffffff',
+      borderColor: 'rgba(14,11,11,0.1)'
+    };
+
+    morphTl.to(morphBox, {
+      ...aboutProps,
+      ease: 'power2.inOut'
+    });
+
+    // Timeline for About -> Projects exit transition
+    gsap.to(morphBox, {
+      scrollTrigger: {
+        trigger: projectsSection,
+        start: 'top 85%',
+        end: 'top 30%',
+        scrub: 1
+      },
+      x: '100vw',
+      opacity: 0,
+      ease: 'power2.in'
+    });
+  }
+
+  function setup() {
+    const formEl = document.getElementById('terminal-form') as HTMLFormElement | null;
+    const inputEl = document.getElementById('terminal-input') as HTMLInputElement | null;
+    if (formEl && !formEl.dataset.bound) {
+      formEl.dataset.bound = 'true';
+      formEl.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (inputEl && inputEl.value) {
+          handleCommand(inputEl.value);
+          inputEl.value = '';
+        }
+      });
+    }
+
+    const terminalLayerEl = document.getElementById('terminal-layer');
+    if (terminalLayerEl && !terminalLayerEl.dataset.bound) {
+      terminalLayerEl.dataset.bound = 'true';
+      terminalLayerEl.addEventListener('wheel', (e) => e.stopPropagation(), { passive: true });
+      terminalLayerEl.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
+    }
+
+    runTypewriter();
+    initMorphScroll();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+  document.addEventListener('astro:page-load', setup);
+
+  window.addEventListener('resize', () => {
+    ScrollTrigger.refresh();
+  });
 </script>

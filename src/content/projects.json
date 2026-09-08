@@ -1,23 +1,167 @@
 [
   {
-    "id": "fintech-dashboard",
+    "id": "geoada",
     "num": "01",
-    "title": "Fintech Dashboard",
-    "description": "Dashboard de analítica de alto rendimiento para visualización de datos financieros en tiempo real, con actualizaciones a milisegundos.",
-    "tags": ["REACT", "TYPESCRIPT", "D3.JS"]
+    "title": "GeoAda",
+    "subtitle": "Sistema de Gestión de Espacios Universitarios & Reservas EINA",
+    "category": "fullstack",
+    "description": "Sistema integral de gestión de espacios universitarios, departamentos, personal y reservas para la Escuela de Ingeniería y Arquitectura (EINA).",
+    "fullDescription": "GeoAda es una plataforma de software diseñada para la gestión integral de la infraestructura académica de la EINA (Universidad de Zaragoza). Permite administrar agregados del dominio universitario como Departamentos, Personas, Edificios, Espacios (aulas, laboratorios, despachos) y Reservas con control de aforo y perfiles de acceso. El proyecto adopta los principios de Domain-Driven Design (DDD) y Arquitectura Hexagonal para garantizar una alta cohesión, aislamiento del núcleo de negocio y fácil escalabilidad.",
+    "authors": ["Iván Vayad Díaz", "Ariana Porroche Llorén"],
+    "year": "2026",
+    "institution": "Universidad de Zaragoza — Laboratorio de Ingeniería del Software",
+    "architecture": [
+      "Arquitectura Hexagonal (Puertos y Adaptadores) con separación estricta de dominio e infraestructura.",
+      "Patrón Agregado DDD: Departamento, Persona, Edificio, Espacio y Reserva.",
+      "Persistencia relacional mediante Spring Data JPA e Hibernate sobre PostgreSQL.",
+      "Despliegue contenerizado multinegocio con Docker y Docker Compose."
+    ],
+    "features": [
+      "Gestión de estructura orgánica de departamentos y asignación de personal docente/investigador.",
+      "Reserva inteligente de aulas, laboratorios y seminarios con validación de disponibilidad en tiempo real.",
+      "Control de aforo, equipamiento tecnológico disponible y estado de espacios.",
+      "Trazabilidad de reservas y gestión de permisos jerárquicos según rol universitario."
+    ],
+    "tags": [
+      "Java",
+      "Spring Boot",
+      "DDD",
+      "Docker",
+      "PostgreSQL",
+      "Arquitectura Hexagonal"
+    ],
+    "repoUrl": "https://github.com/tu-usuario/geoada-eina",
+    "demoUrl": "https://geoada.eina.unizar.es",
+    "documentationUrl": "/informe_GeoAda.pdf",
+    "image": "/images/projects/geoada_preview.png",
+    "images": [
+      "/images/projects/geoada_1.png",
+      "/images/projects/geoada_2.png",
+      "/images/projects/geoada_3.png"
+    ]
   },
   {
-    "id": "brutalist-ecommerce",
+    "id": "montgomery",
     "num": "02",
-    "title": "Brutalist E-commerce",
-    "description": "Frontend headless experimental de e-commerce, centrado en tipografía bold y estructuras de grid poco convencionales.",
-    "tags": ["NEXT.JS", "TAILWIND", "STRIPE"]
+    "title": "Montgomery SafetyMap",
+    "subtitle": "Plataforma Geoespacial de Análisis de Seguridad Ciudadana",
+    "category": "fullstack",
+    "description": "Plataforma geoespacial de análisis de seguridad pública para el Condado de Montgomery con mapas en tiempo real y estadísticas policiales.",
+    "fullDescription": "Montgomery SafetyMap es una solución tecnológica avanzada desarrollada para transformar datos brutos de incidentes delictivos en inteligencia geoespacial útil tanto para las fuerzas de seguridad pública (Policía del Condado de Montgomery) como para la ciudadanía. Ofrece herramientas de análisis temporal, mapas de densidad de delitos por Sectores y Beats, y un portal público de concienciación y prevención.",
+    "authors": ["Iván Vayad Díaz y equipo de desarrollo"],
+    "year": "2026",
+    "institution": "Universidad de Zaragoza",
+    "architecture": [
+      "Modelo cliente-servidor distribuido con API REST en Node.js / Express y procesado analítico en Python.",
+      "Almacenamiento y consultas geoespaciales avanzadas utilizando PostgreSQL con extensión PostGIS.",
+      "Capa de renderizado de mapas interactivos vectoriales con Leaflet.js y Mapbox GL.",
+      "Dashboard analítico dinámico con gráficos de líneas, sectores y barras por franjas horarias."
+    ],
+    "features": [
+      "Visualización geoespacial detallada por Distritos (DD6), Sectores (DD7) y Beats (DD8) policiales.",
+      "Filtros multidimensionales por tipología de delito (DD1/DD2), rangos de fechas y número de víctimas.",
+      "Estadísticas policiales avanzadas con análisis de patrones horarios y zonas de mayor incidencia.",
+      "Portal ciudadano adaptativo para consulta rápida de seguridad en zonas urbanas."
+    ],
+    "tags": [
+      "React",
+      "Node.js",
+      "Leaflet",
+      "PostGIS",
+      "Python",
+      "Spatial Analytics"
+    ],
+    "repoUrl": "https://github.com/tu-usuario/montgomery-safetymap",
+    "demoUrl": "https://montgomery-safetymap.demo.com",
+    "documentationUrl": "/informe_Mongomery.pdf",
+    "image": "/images/projects/montgomery_preview.png",
+    "images": [
+      "/images/projects/montgomery_1.png",
+      "/images/projects/montgomery_2.png",
+      "/images/projects/montgomery_3.png"
+    ]
   },
   {
-    "id": "a-darts",
+    "id": "sanbot",
     "num": "03",
-    "title": "A-Darts",
-    "description": "Sistema de gestión en tiempo real de torneos de dardos de punta de acero.",
-    "tags": ["REACT", "NODE.JS", "POSTGRESQL"]
+    "title": "Sanbot Vitalia",
+    "subtitle": "Robot Social de Asistencia para Personas Mayores",
+    "category": "movil",
+    "description": "Aplicación de robótica social para Sanbot ELF enfocada en asistencia a personas mayores, rutinas diarias y estimulación cognitiva.",
+    "fullDescription": "Vitalia es un sistema de asistencia diseñado para ejecutarse nativamente en la pantalla y hardware del robot social Sanbot ELF. Su objetivo principal es acompañar a personas mayores que viven solas, ayudándolas a estructurar su rutina diaria, recordando tomas de medicación o citas médicas, y fomentando la actividad mental a través de juegos interactivos de memoria y lógica accesibles por voz y toque.",
+    "authors": ["Iván Vayad Díaz", "Lucía Vázquez Martín", "Luna Zhou Chen"],
+    "year": "2026",
+    "institution": "Universidad de Zaragoza — Diseño Centrado en el Usuario",
+    "architecture": [
+      "Integración directa con el SDK nativo de Android de Sanbot ELF para control de motores y pantalla.",
+      "Motor de síntesis de voz (Text-to-Speech) y reconocimiento de lenguaje natural adaptado.",
+      "Arquitectura basada en máquinas de estado para la gestión de rutinas y recordatorios activos.",
+      "Diseño de interfaz de alta legibilidad y contraste adaptado a pautas de accesibilidad para mayores."
+    ],
+    "features": [
+      "Recordatorios proactivos de voz y pantalla para medicación, citas y hábitos saludables.",
+      "Minijuegos de estimulación cognitiva adaptativos con seguimiento de progreso del usuario.",
+      "Interacción multimodal mediante pantalla táctil simplificada y comandos de voz claros.",
+      "Rutina diaria personalizada que se adapta al ritmo de vida de la persona mayor."
+    ],
+    "tags": [
+      "Android SDK",
+      "Java/Kotlin",
+      "Sanbot SDK",
+      "Robotics",
+      "HCI / Accessibility"
+    ],
+    "repoUrl": "https://github.com/tu-usuario/sanbot-vitalia",
+    "demoUrl": "https://vitalia-robot.demo.com",
+    "documentationUrl": "/informe_vitalia.pdf",
+    "image": "/images/projects/sanbot_preview.png",
+    "images": [
+      "/images/projects/sanbot_1.png",
+      "/images/projects/sanbot_2.png",
+      "/images/projects/sanbot_3.png"
+    ]
+  },
+  {
+    "id": "bookly",
+    "num": "04",
+    "title": "Bookly",
+    "subtitle": "Plataforma Digital de Lectura PDF & Comunidad de Lectores",
+    "category": "frontend",
+    "description": "Plataforma web de lectura e interacción en libros digitales PDF con sincronización en tiempo real y funciones sociales.",
+    "fullDescription": "Bookly es una plataforma digital de lectura de libros electrónicos en formato PDF que combina un potente visor interactivo con funciones de red social para lectores. Los usuarios pueden organizar su biblioteca personal, sincronizar al instante su progreso de lectura entre múltiples dispositivos, crear notas colaborativas y participar en clubes de lectura con otros usuarios.",
+    "authors": [
+      "Luna Zhou Chen",
+      "Lucía Vázquez Martín",
+      "Iván Vayad Díaz",
+      "Javier Susín Villacampa",
+      "Diego Simón Íñiguez",
+      "Ariana Porroche Llorén",
+      "Irene Pascual Albericio",
+      "Alex Giménez Garrido"
+    ],
+    "year": "2025",
+    "institution": "Organización Susan Kare / GitHub",
+    "architecture": [
+      "Renderizado desacoplado de documentos PDF cliente mediante PDF.js y Web Workers.",
+      "Servidor de sockets bidireccional (WebSockets / Socket.io) para sincronización en tiempo real.",
+      "Base de datos de documentos y notas en MongoDB con capa de cache de sesiones en Redis.",
+      "Desarrollo iterativo guiado por metodología Agile en dos grandes entregables."
+    ],
+    "features": [
+      "Visor PDF avanzado con marcadores, subrayado de texto y modo noche/lectura cómoda.",
+      "Sincronización instantánea de página de lectura y progreso entre dispositivos del usuario.",
+      "Bibliotecas virtuales personalizables con etiquetas, estados de lectura y listas de deseos.",
+      "Ecosistema social con clubs de lectura, comentarios en margen y valoraciones de libros."
+    ],
+    "tags": ["React", "Node.js", "WebSockets", "PDF.js", "MongoDB", "Redis"],
+    "repoUrl": "https://github.com/UNIZAR-30226-2025-60",
+    "demoUrl": "https://bookly-app.demo.com",
+    "documentationUrl": "/informe_bookly.pdf",
+    "image": "/images/projects/bookly_preview.png",
+    "images": [
+      "/images/projects/bookly_1.png",
+      "/images/projects/bookly_2.png",
+      "/images/projects/bookly_3.png"
+    ]
   }
 ]

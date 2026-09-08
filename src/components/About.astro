@@ -1,17 +1,62 @@
 ---
 ---
-<section class="bg-cream text-ink h-dvh snap-start snap-always px-16 pt-20 relative overflow-hidden">
 
-  <span class="absolute -top-10 right-0 font-serif font-bold text-[28rem] leading-none text-ink/10 select-none pointer-events-none">
+<section
+  id="about-section"
+  class="bg-cream text-ink min-h-dvh relative overflow-hidden py-16 md:py-24 px-6 md:px-16 flex flex-col justify-between"
+>
+  <span
+    class="absolute -top-10 right-0 font-serif font-bold text-[18rem] md:text-[28rem] leading-none text-ink/5 select-none pointer-events-none"
+  >
     01
   </span>
-  <div class="about-title">
-    <p class="font-mono text-xs text-garnet mb-4 tracking-wide relative">// SECCION.01</p>
 
-    <h2 class="font-serif font-semibold text-6xl leading-none mb-4 relative max-w-3xl">
-        Technical<br>
-        <span class="text-garnet italic">Skills</span>
+  <div id="about-title-block" class="about-title max-w-3xl relative z-10">
+    <p class="font-mono text-xs text-garnet mb-3 tracking-wide relative uppercase font-semibold">
+      // SECCIÓN 01 &mdash; SOBRE MÍ & STACK
+    </p>
+
+    <h2 class="font-serif font-semibold text-4xl sm:text-6xl md:text-7xl leading-none mb-4 relative">
+      Technical<br />
+      <span class="text-garnet italic">Skills & Architecture</span>
     </h2>
   </div>
-  
 </section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function animateAboutTitle() {
+    const titleBlock = document.getElementById('about-title-block');
+    if (!titleBlock) return;
+
+    gsap.fromTo(
+      titleBlock.children,
+      { y: 50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+        stagger: 0.12,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#about-section',
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+
+    ScrollTrigger.refresh();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', animateAboutTitle);
+  } else {
+    animateAboutTitle();
+  }
+  document.addEventListener('astro:page-load', animateAboutTitle);
+</script>

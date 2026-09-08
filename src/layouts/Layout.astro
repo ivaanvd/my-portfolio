@@ -2,6 +2,13 @@
 import "../styles/global.css";
 import NavBar from '../components/NavBar.astro';
 import MorphBox from '../components/MorphBox.astro';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+	title?: string;
+}
+
+const { title = "Iván Vayad — Software Engineer" } = Astro.props;
 ---
 <!doctype html>
 <html lang="es">
@@ -11,11 +18,51 @@ import MorphBox from '../components/MorphBox.astro';
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Iván Vayad — Software Engineer</title>
+		<title>{title}</title>
+		<ClientRouter />
 	</head>
-	<body>
+	<body class="bg-ink text-white antialiased selection:bg-garnet selection:text-white">
 		<NavBar />
 		<MorphBox />
 		<slot />
+
+		<script>
+			import Lenis from 'lenis';
+			import { gsap } from 'gsap';
+			import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+			gsap.registerPlugin(ScrollTrigger);
+
+			let lenisInstance: Lenis | null = null;
+
+			function initLenis() {
+				if (lenisInstance) {
+					lenisInstance.destroy();
+				}
+
+				lenisInstance = new Lenis({
+					duration: 1.2,
+					easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+					smoothWheel: true,
+				});
+
+				lenisInstance.on('scroll', ScrollTrigger.update);
+
+				gsap.ticker.add((time: number) => {
+					if (lenisInstance) {
+						lenisInstance.raf(time * 1000);
+					}
+				});
+
+				gsap.ticker.lagSmoothing(0);
+			}
+
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', initLenis);
+			} else {
+				initLenis();
+			}
+			document.addEventListener('astro:page-load', initLenis);
+		</script>
 	</body>
 </html>

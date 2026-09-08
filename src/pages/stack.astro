@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { CodeXml, LayoutPanelTop, Server, Wrench } from '@lucide/astro';
+
+const stackCategories = [
+  {
+    title: 'Lenguajes de Programación',
+    icon: CodeXml,
+    items: [
+      { name: 'JavaScript (ES6+)', desc: 'Asincronía moderna, closures, manipulación nativa del DOM y ecosistema Node.js.' },
+      { name: 'TypeScript', desc: 'Tipado estático avanzado, interfaces, genéricos y seguridad en compilación.' },
+      { name: 'Python', desc: 'Scripting, desarrollo backend con FastAPI / Django y procesamiento de datos.' },
+      { name: 'Java', desc: 'Programación orientada a objetos, Spring Boot y estructuras de datos.' },
+    ],
+  },
+  {
+    title: 'Frontend & UI',
+    icon: LayoutPanelTop,
+    items: [
+      { name: 'React / Next.js', desc: 'Componentes reutilizables, hooks avanzados, Server Components y SSR.' },
+      { name: 'Tailwind CSS', desc: 'Maquetación rápida utility-first y diseño responsive adaptable.' },
+      { name: 'Astro', desc: 'Generación estática ultra-rápida e integración híbrida de frameworks.' },
+      { name: 'GSAP & Motion', desc: 'Animaciones complejas por scroll, timelines y micro-interacciones.' },
+    ],
+  },
+  {
+    title: 'Backend & Bases de Datos',
+    icon: Server,
+    items: [
+      { name: 'Node.js / Express', desc: 'Creación de REST APIs escalables, middleware y autenticación JWT.' },
+      { name: 'PostgreSQL', desc: 'Bases de datos relacionales, modelado de esquemas y optimización SQL.' },
+      { name: 'MongoDB', desc: 'Almacenamiento NoSQL de documentos flexibles con Mongoose.' },
+    ],
+  },
+  {
+    title: 'Herramientas & Workflow',
+    icon: Wrench,
+    items: [
+      { name: 'Git & GitHub', desc: 'Control de versiones, flujos Gitflow, PRs y GitHub Actions CI/CD.' },
+      { name: 'Docker', desc: 'Contenerización de aplicaciones e integración de entornos locales.' },
+      { name: 'Figma', desc: 'Prototipado de interfaces y diseño de sistemas UI/UX.' },
+    ],
+  },
+];
+---
+
+<Layout title="Stack Tecnológico — Iván Vayad">
+  <main class="min-h-dvh bg-ink text-white pt-36 px-6 md:px-16 max-w-6xl mx-auto pb-24">
+    <p class="font-mono text-xs text-garnet-bright tracking-widest uppercase mb-4 font-semibold">
+      // STACK TECNOLÓGICO
+    </p>
+
+    <h1 class="font-display font-black text-5xl md:text-7xl uppercase leading-none mb-12 tracking-tight">
+      Tecnologías & <br />
+      <span class="text-garnet-bright italic">Herramientas</span>
+    </h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      {
+        stackCategories.map(({ title, icon: Icon, items }) => (
+          <div class="bg-ink-2 p-8 rounded-xl border border-white/10">
+            <div class="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
+              <Icon size={22} class="text-garnet-bright" />
+              <h2 class="font-display font-bold text-xl uppercase tracking-wide">{title}</h2>
+            </div>
+
+            <div class="space-y-4">
+              {items.map(({ name, desc }) => (
+                <div>
+                  <h3 class="font-mono text-sm text-white font-bold">{name}</h3>
+                  <p class="text-xs text-white/60 mt-1 font-sans leading-relaxed">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </main>
+</Layout>

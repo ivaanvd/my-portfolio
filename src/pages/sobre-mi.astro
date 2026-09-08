@@ -1,0 +1,192 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Award, GraduationCap, MapPin, Mail, Phone, Car, Globe, Cpu, Code } from '@lucide/astro';
+---
+
+<Layout title="Sobre Mí — Iván Vayad Díaz">
+  <main class="min-h-dvh bg-ink text-white pt-32 px-6 md:px-16 max-w-6xl mx-auto pb-24">
+    <div id="sobre-mi-header" class="mb-12">
+      <p class="font-mono text-xs text-garnet-bright tracking-widest uppercase mb-4 font-semibold">
+        // PERFIL PROFESIONAL & BENTO GRID
+      </p>
+
+      <h1 class="font-display font-black text-5xl sm:text-7xl uppercase leading-none tracking-tight">
+        Iván Vayad <span class="text-garnet-bright italic">Díaz</span>
+      </h1>
+      <p class="font-mono text-white/60 text-sm mt-3">
+        Estudiante de Ingeniería Informática &mdash; Especialidad en Ingeniería del Software
+      </p>
+    </div>
+
+    <!-- BENTO GRID CONTAINER -->
+    <div id="bento-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 font-sans">
+      
+      <!-- BENTO 1: BIOGRAFÍA & PERFIL (Span 2 col) -->
+      <div class="md:col-span-2 bg-ink-2 p-8 rounded-2xl border border-white/10 flex flex-col justify-between hover:border-garnet-bright/50 transition-colors">
+        <div>
+          <div class="flex items-center gap-2 font-mono text-xs text-garnet-bright mb-4 font-bold uppercase">
+            <Code size={16} />
+            <span>Perfil & Persecución Técnica</span>
+          </div>
+
+          <p class="text-white/90 text-base md:text-lg leading-relaxed mb-4">
+            Estudiante de último curso de <strong class="text-white">Ingeniería Informática</strong> en la <strong class="text-white">Universidad de Zaragoza</strong> con especialización en <strong class="text-garnet-bright">Ingeniería del Software</strong>.
+          </p>
+
+          <p class="text-white/70 text-sm leading-relaxed">
+            Me defino por tener una mentalidad analítica y gran capacidad de adaptación. Busco integrarme en entornos dinámicos para aportar soluciones prácticas a problemas reales con iniciativa y rigor técnico.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-4 pt-6 border-t border-white/10 font-mono text-xs text-white/60">
+          <span class="flex items-center gap-1.5">
+            <MapPin size={14} class="text-garnet-bright" /> Zaragoza, España
+          </span>
+          <span class="flex items-center gap-1.5">
+            <Mail size={14} class="text-garnet-bright" /> ivanvayad.2004@gmail.com
+          </span>
+          <span class="flex items-center gap-1.5">
+            <Phone size={14} class="text-garnet-bright" /> +34 652 26 00 21
+          </span>
+        </div>
+      </div>
+
+      <!-- BENTO 2: PREMIO HACKATHON (Span 1 col) -->
+      <div class="bg-gradient-to-br from-garnet-dim/40 to-ink-2 p-8 rounded-2xl border border-garnet/50 flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute -right-4 -bottom-4 opacity-10 font-display font-black text-9xl text-garnet-bright select-none">
+          1st
+        </div>
+
+        <div>
+          <div class="flex items-center gap-2 font-mono text-xs text-garnet-bright mb-4 font-bold uppercase">
+            <Award size={18} />
+            <span>Premios & Hackathons</span>
+          </div>
+
+          <h3 class="font-display font-bold text-2xl text-white mb-2 group-hover:text-garnet-bright transition-colors">
+            1<sup>er</sup> Puesto
+          </h3>
+
+          <p class="text-white/80 text-sm font-mono leading-snug">
+            Hackathon de IA Generativa con PartyRock
+          </p>
+        </div>
+
+        <span class="font-mono text-xs text-garnet-bright/80 mt-6 block">
+          FEB 2026 &mdash; RECONOCIMIENTO
+        </span>
+      </div>
+
+      <!-- BENTO 3: ESTUDIOS (Span 1 col) -->
+      <div class="bg-ink-2 p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-colors flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 font-mono text-xs text-garnet-bright mb-4 font-bold uppercase">
+            <GraduationCap size={18} />
+            <span>Educación</span>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-bold text-base text-white">Grado en Ingeniería Informática</h4>
+              <p class="text-xs text-white/60 font-mono">Universidad de Zaragoza (2022 - Actualidad)</p>
+            </div>
+
+            <div class="pt-2 border-t border-white/5">
+              <h4 class="font-bold text-sm text-white/90">Bachillerato Tecnológico</h4>
+              <p class="text-xs text-white/50 font-mono">Colegio Santa María del Pilar Marianistas (2020 - 2022)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENTO 4: ARQUITECTURA & DISEÑO (Span 1 col) -->
+      <div class="bg-ink-2 p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-colors">
+        <div class="flex items-center gap-2 font-mono text-xs text-garnet-bright mb-4 font-bold uppercase">
+          <Cpu size={18} />
+          <span>Arquitectura & Paradigmas</span>
+        </div>
+
+        <ul class="space-y-3 font-mono text-xs text-white/80">
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-garnet-bright"></span>
+            Domain-Driven Design (DDD)
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-garnet-bright"></span>
+            Arquitectura Hexagonal
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-garnet-bright"></span>
+            Diseño Centrado en el Usuario (UX/UI)
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-garnet-bright"></span>
+            Desarrollo Robótico & Asistencial
+          </li>
+        </ul>
+      </div>
+
+      <!-- BENTO 5: IDIOMAS & OTROS DATOS (Span 1 col) -->
+      <div class="bg-ink-2 p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-colors flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 font-mono text-xs text-garnet-bright mb-4 font-bold uppercase">
+            <Globe size={18} />
+            <span>Idiomas & Licencia</span>
+          </div>
+
+          <div class="space-y-3 font-mono text-xs">
+            <div class="flex items-center justify-between border-b border-white/5 pb-2">
+              <span class="text-white/70">Inglés</span>
+              <span class="text-garnet-bright font-bold">Alto (C1)</span>
+            </div>
+            <div class="flex items-center justify-between border-b border-white/5 pb-2">
+              <span class="text-white/70">Español</span>
+              <span class="text-white font-bold">Nativo</span>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-white/70 flex items-center gap-1.5"><Car size={14} /> Permiso de Conducir</span>
+              <span class="text-white font-bold">Clase B</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function animateBento() {
+    const grid = document.getElementById('bento-grid');
+    if (!grid) return;
+
+    gsap.fromTo(
+      grid.children,
+      { clipPath: 'inset(0 0 100% 0)', y: 40, opacity: 0 },
+      {
+        clipPath: 'inset(0 0 0% 0)',
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: grid,
+          start: 'top 85%'
+        }
+      }
+    );
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', animateBento);
+  } else {
+    animateBento();
+  }
+  document.addEventListener('astro:page-load', animateBento);
+</script>

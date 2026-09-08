@@ -1,0 +1,470 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { 
+  ArrowLeft, 
+  ExternalLink, 
+  Users, 
+  Calendar, 
+  Building2, 
+  Layers, 
+  Check, 
+  CodeXml, 
+  ArrowRight,
+  Monitor,
+  FileText,
+  ChevronLeft,
+  ChevronRight
+} from '@lucide/astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { id: project.data.id },
+    props: { project, allProjects: projects },
+  }));
+}
+
+const { project, allProjects } = Astro.props;
+const { 
+  num, 
+  title, 
+  subtitle, 
+  category, 
+  fullDescription, 
+  authors, 
+  year, 
+  institution, 
+  architecture, 
+  features, 
+  tags, 
+  repoUrl, 
+  demoUrl,
+  documentationUrl,
+  images = []
+} = project.data;
+
+// Default slide placeholders if user hasn't added custom images yet
+const carouselSlides = images.length > 0 ? images : [
+  { id: 1, label: "CAPTURA 01 — VISTA PRINCIPAL DE LA APLICACIÓN" },
+  { id: 2, label: "CAPTURA 02 — DASHBOARD & ANALÍTICA DE DATOS" },
+  { id: 3, label: "CAPTURA 03 — INTERFAZ MÓVIL & ACCESIBILIDAD" }
+];
+
+// Find next and previous projects for bottom navigation
+const currentIndex = allProjects.findIndex((p) => p.data.id === project.data.id);
+const prevProject = allProjects[(currentIndex - 1 + allProjects.length) % allProjects.length];
+const nextProject = allProjects[(currentIndex + 1) % allProjects.length];
+---
+
+<Layout title={`${title} — Proyecto Iván Vayad`}>
+  <main class="min-h-dvh bg-ink text-white pt-28 pb-32 px-6 md:px-16 max-w-6xl mx-auto overflow-hidden">
+    
+    <!-- BACK BUTTON -->
+    <div class="mb-8">
+      <a
+        href="/proyectos"
+        class="inline-flex items-center gap-2 font-mono text-xs text-white/60 hover:text-garnet-bright transition-colors uppercase tracking-wider no-underline group"
+      >
+        <ArrowLeft size={16} class="group-hover:-translate-x-1 transition-transform" />
+        Volver a Proyectos
+      </a>
+    </div>
+
+    <!-- HEADER SECTION & MAIN ACTIONS -->
+    <header id="project-header" class="mb-12">
+      <div class="flex items-center gap-3 mb-4 font-mono text-xs text-garnet-bright tracking-widest uppercase">
+        <span class="px-2.5 py-1 rounded bg-garnet/20 border border-garnet-dim font-bold">
+          PROJECT_{num}
+        </span>
+        <span>// {category}</span>
+      </div>
+
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-6">
+        <div>
+          <h1 class="font-display font-black text-4xl sm:text-6xl md:text-7xl uppercase leading-none tracking-tight mb-4 text-white">
+            {title}
+          </h1>
+
+          <p class="font-mono text-base md:text-lg text-garnet-bright max-w-3xl font-medium leading-relaxed">
+            {subtitle}
+          </p>
+        </div>
+
+        <!-- ACTION BUTTONS: GITHUB, DOCUMENTATION, LIVE DEMO -->
+        <div class="flex flex-wrap items-center gap-3 shrink-0">
+          <a
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider bg-white/5 hover:bg-garnet border border-white/20 hover:border-garnet-bright text-white px-4 py-3 rounded-lg transition-all duration-200 no-underline shadow-md"
+            title="Ver código fuente en GitHub"
+          >
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            Ver Repositorio
+          </a>
+
+          <a
+            href={documentationUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider bg-white/5 hover:bg-garnet border border-white/20 hover:border-garnet-bright text-white px-4 py-3 rounded-lg transition-all duration-200 no-underline shadow-md"
+            title="Ver documentación en PDF"
+          >
+            <FileText size={16} class="text-garnet-bright" />
+            Ver Documentación
+          </a>
+
+          <a
+            href={demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider bg-garnet hover:bg-garnet-bright text-white px-5 py-3 rounded-lg transition-all duration-200 no-underline shadow-lg shadow-garnet/40"
+          >
+            <ExternalLink size={16} />
+            Demo en Vivo
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- COMPUTER MONITOR MOCKUP WITH CAROUSEL -->
+    <div id="project-banner" class="relative max-w-5xl mx-auto mb-16 group">
+      <!-- Laptop Screen Frame Container -->
+      <div class="relative rounded-2xl bg-ink-2 border border-white/15 overflow-hidden shadow-2xl">
+        
+        <!-- Browser Top Bar -->
+        <div class="flex items-center justify-between px-4 py-3 bg-black/80 border-b border-white/10 font-mono text-xs text-white/40">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+            <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+            <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+          </div>
+
+          <div class="flex items-center gap-2 bg-white/5 border border-white/10 rounded-md px-4 py-1 text-[11px] text-white/60 max-w-md w-full justify-center truncate font-mono">
+            <span>https://</span>
+            <span class="text-white/90 font-medium">{demoUrl.replace(/^https?:\/\//, '')}</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <Monitor size={14} class="text-white/40" />
+          </div>
+        </div>
+
+        <!-- CAROUSEL SCREEN VIEWPORT -->
+        <div class="relative overflow-hidden min-h-[340px] md:min-h-[480px] bg-black">
+          
+          <!-- CAROUSEL SLIDES TRACK -->
+          <div id="carousel-track" class="flex h-full w-full transition-transform duration-500 ease-out">
+            {carouselSlides.map((slide, idx) => (
+              <div class="w-full shrink-0 h-full min-h-[340px] md:min-h-[480px] relative flex flex-col items-center justify-center p-8 md:p-12 bg-gradient-to-br from-garnet/20 via-ink-2 to-black text-center select-none">
+                
+                {typeof slide === 'string' ? (
+                  /* Real image element when path provided */
+                  <img
+                    src={slide}
+                    alt={`${title} screenshot ${idx + 1}`}
+                    class="absolute inset-0 w-full h-full object-cover"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                  />
+                ) : null}
+
+                {/* Slide Card Content / Fallback visual design */}
+                <div class="slide-fallback flex flex-col items-center justify-center relative z-10 max-w-xl mx-auto">
+                  <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#9B111E_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+
+                  <div class="w-16 h-16 rounded-2xl bg-garnet/30 border border-garnet-bright flex items-center justify-center mx-auto mb-6 shadow-lg shadow-garnet/40">
+                    <CodeXml size={32} class="text-garnet-bright" />
+                  </div>
+
+                  <span class="font-mono text-xs uppercase tracking-widest text-garnet-bright bg-garnet/20 border border-garnet-dim px-3 py-1 rounded-full mb-3 inline-block font-semibold">
+                    {typeof slide === 'object' ? slide.label : `CAPTURA 0${idx + 1} — CAPTURA DE PANTALLA`}
+                  </span>
+
+                  <p class="font-mono text-xs text-white/50 max-w-md leading-relaxed">
+                    [ Galería interactiva del proyecto — Desliza o usa los controles para cambiar de captura ]
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <!-- CAROUSEL ARROW CONTROLS -->
+          <button
+            id="carousel-prev"
+            class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-garnet hover:border-garnet-bright transition-all cursor-pointer shadow-lg backdrop-blur-sm"
+            aria-label="Captura anterior"
+          >
+            <ChevronLeft size={20} />
+          </button>
+
+          <button
+            id="carousel-next"
+            class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-garnet hover:border-garnet-bright transition-all cursor-pointer shadow-lg backdrop-blur-sm"
+            aria-label="Siguiente captura"
+          >
+            <ChevronRight size={20} />
+          </button>
+
+          <!-- CAROUSEL BOTTOM INDICATORS -->
+          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 border border-white/10 backdrop-blur-sm">
+            {carouselSlides.map((_, idx) => (
+              <button
+                class="carousel-dot w-2.5 h-2.5 rounded-full bg-white/30 hover:bg-white transition-all cursor-pointer"
+                data-index={idx}
+                aria-label={`Ir a la captura ${idx + 1}`}
+              ></button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Laptop Stand / Base Styling -->
+      <div class="h-3 bg-gradient-to-b from-white/20 to-white/5 rounded-b-xl w-3/4 mx-auto border-t border-white/10 shadow-lg"></div>
+    </div>
+
+    <!-- MAIN CONTENT GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+      
+      <!-- LEFT / MAIN COL (2 COLS) -->
+      <div class="lg:col-span-2 space-y-14">
+        
+        <!-- DESCRIPTION SECTION -->
+        <section class="space-y-4">
+          <h2 class="font-serif font-bold text-2xl md:text-3xl text-white flex items-center gap-3">
+            <span class="w-2 h-6 bg-garnet-bright rounded-full"></span>
+            Descripción General
+          </h2>
+
+          <p class="text-white/80 leading-relaxed text-base md:text-lg font-sans">
+            {fullDescription}
+          </p>
+        </section>
+
+        <!-- ARCHITECTURE SECTION -->
+        <section class="space-y-6">
+          <h2 class="font-serif font-bold text-2xl md:text-3xl text-white flex items-center gap-3">
+            <span class="w-2 h-6 bg-garnet-bright rounded-full"></span>
+            Arquitectura & Decisiones Técnicas
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {architecture.map((item, idx) => (
+              <div class="bg-ink-2 border border-white/10 rounded-xl p-5 hover:border-garnet/40 transition-colors flex items-start gap-3">
+                <div class="w-7 h-7 rounded-lg bg-garnet/20 border border-garnet-dim shrink-0 flex items-center justify-center text-garnet-bright font-mono text-xs font-bold mt-0.5">
+                  0{idx + 1}
+                </div>
+                <p class="text-white/80 font-mono text-xs leading-relaxed">
+                  {item}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- KEY FEATURES SECTION -->
+        <section class="space-y-6">
+          <h2 class="font-serif font-bold text-2xl md:text-3xl text-white flex items-center gap-3">
+            <span class="w-2 h-6 bg-garnet-bright rounded-full"></span>
+            Funcionalidades Clave
+          </h2>
+
+          <div class="bg-ink-2 border border-white/10 rounded-xl p-6 md:p-8 space-y-4">
+            {features.map((feat) => (
+              <div class="flex items-start gap-3">
+                <Check size={18} class="text-garnet-bright shrink-0 mt-1" />
+                <p class="text-white/80 font-sans text-sm md:text-base leading-relaxed">
+                  {feat}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT SIDEBAR COL (1 COL) -->
+      <aside class="space-y-8 lg:sticky lg:top-28">
+        
+        <!-- METADATA CARD -->
+        <div class="bg-ink-2 border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
+          <h3 class="font-mono text-xs text-garnet-bright uppercase tracking-widest font-semibold border-b border-white/10 pb-4">
+            // FICHA TÉCNICA
+          </h3>
+
+          <!-- Authors -->
+          <div class="space-y-2">
+            <span class="font-mono text-xs text-white/40 flex items-center gap-2">
+              <Users size={14} /> Autores del Proyecto
+            </span>
+            <ul class="space-y-1">
+              {authors.map((author) => (
+                <li class="font-mono text-xs text-white font-medium flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-garnet-bright"></span>
+                  {author}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Institution -->
+          <div class="space-y-1">
+            <span class="font-mono text-xs text-white/40 flex items-center gap-2">
+              <Building2 size={14} /> Contexto / Institución
+            </span>
+            <p class="font-mono text-xs text-white leading-relaxed">
+              {institution}
+            </p>
+          </div>
+
+          <!-- Year -->
+          <div class="space-y-1">
+            <span class="font-mono text-xs text-white/40 flex items-center gap-2">
+              <Calendar size={14} /> Año de Desarrollo
+            </span>
+            <p class="font-mono text-xs text-white font-semibold">
+              {year}
+            </p>
+          </div>
+
+          <!-- Category -->
+          <div class="space-y-1">
+            <span class="font-mono text-xs text-white/40 flex items-center gap-2">
+              <Layers size={14} /> Categoría
+            </span>
+            <p class="font-mono text-xs text-garnet-bright uppercase font-semibold">
+              {category}
+            </p>
+          </div>
+        </div>
+
+        <!-- TECH STACK CARD -->
+        <div class="bg-ink-2 border border-white/10 rounded-2xl p-6 md:p-8 space-y-4">
+          <h3 class="font-mono text-xs text-garnet-bright uppercase tracking-widest font-semibold border-b border-white/10 pb-4">
+            // STACK TECNOLÓGICO
+          </h3>
+
+          <div class="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/80 font-mono text-xs hover:border-garnet-bright transition-colors">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- BOTTOM PROJECT NAVIGATION -->
+    <nav class="mt-24 pt-12 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <a
+        href={`/proyectos/${prevProject.data.id}`}
+        class="bg-ink-2 border border-white/10 hover:border-garnet/50 rounded-xl p-6 transition-all duration-300 group no-underline flex flex-col justify-between"
+      >
+        <span class="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <ArrowLeft size={12} /> PROYECTO ANTERIOR
+        </span>
+        <span class="font-display font-bold text-xl text-white group-hover:text-garnet-bright transition-colors">
+          {prevProject.data.title}
+        </span>
+      </a>
+
+      <a
+        href={`/proyectos/${nextProject.data.id}`}
+        class="bg-ink-2 border border-white/10 hover:border-garnet/50 rounded-xl p-6 transition-all duration-300 group no-underline flex flex-col justify-between text-right"
+      >
+        <span class="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-2 flex items-center justify-end gap-1">
+          PROYECTO SIGUIENTE <ArrowRight size={12} />
+        </span>
+        <span class="font-display font-bold text-xl text-white group-hover:text-garnet-bright transition-colors">
+          {nextProject.data.title}
+        </span>
+      </a>
+    </nav>
+  </main>
+</Layout>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function initCarouselAndAnimations() {
+    const header = document.getElementById('project-header');
+    const banner = document.getElementById('project-banner');
+
+    if (header && banner) {
+      gsap.fromTo(
+        [header, banner],
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out' }
+      );
+    }
+
+    // --- CAROUSEL LOGIC ---
+    const track = document.getElementById('carousel-track');
+    const prevBtn = document.getElementById('carousel-prev');
+    const nextBtn = document.getElementById('carousel-next');
+    const dots = document.querySelectorAll('.carousel-dot');
+
+    if (!track) return;
+
+    const slidesCount = dots.length;
+    let currentIndex = 0;
+
+    function updateCarousel() {
+      if (!track) return;
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+      dots.forEach((dot, idx) => {
+        if (idx === currentIndex) {
+          dot.classList.remove('bg-white/30', 'w-2.5');
+          dot.classList.add('bg-garnet-bright', 'w-6');
+        } else {
+          dot.classList.remove('bg-garnet-bright', 'w-6');
+          dot.classList.add('bg-white/30', 'w-2.5');
+        }
+      });
+    }
+
+    prevBtn?.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + slidesCount) % slidesCount;
+      updateCarousel();
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % slidesCount;
+      updateCarousel();
+    });
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = Number(dot.getAttribute('data-index'));
+        if (!isNaN(idx)) {
+          currentIndex = idx;
+          updateCarousel();
+        }
+      });
+    });
+
+    // Keyboard Arrow Keys
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        currentIndex = (currentIndex - 1 + slidesCount) % slidesCount;
+        updateCarousel();
+      } else if (e.key === 'ArrowRight') {
+        currentIndex = (currentIndex + 1) % slidesCount;
+        updateCarousel();
+      }
+    });
+
+    // Initial update
+    updateCarousel();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCarouselAndAnimations);
+  } else {
+    initCarouselAndAnimations();
+  }
+  document.addEventListener('astro:page-load', initCarouselAndAnimations);
+</script>

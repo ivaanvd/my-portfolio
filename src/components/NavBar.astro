@@ -1,26 +1,97 @@
-<div class="navbar-wrap fixed top-0 inset-x-0 z-40 h-76px">
-  <div class="navbar-bg navbar-bg-dark absolute inset-0"></div>
-  <div class="navbar-bg navbar-bg-light absolute inset-0"></div>
+---
+const currentPath = Astro.url.pathname;
+---
 
-  <nav class="relative h-full px-16 flex items-center">
-    <div class="nav-content nav-dark absolute inset-x-16 flex justify-between items-center font-mono text-sm text-white/60">
-      <span class="text-white font-normal hover:font-black hover:scale-110 inline-block cursor-pointer transition-all duration-200">IV.</span>
-      <div class="flex gap-8">
-        <a href="#about" class="hover:text-garnet-bright cursor-pointer">Sobre mi</a>
-        <a href="#stack" class="hover:text-garnet-bright cursor-pointer">Stack</a>
-        <a href="#projects" class="hover:text-garnet-bright cursor-pointer">Proyectos</a>
-        <a href="#contact" class="hover:text-garnet-bright cursor-pointer">Contactame</a>
-      </div>
-    </div>
-
-    <div class="nav-content nav-light absolute inset-x-16 flex justify-between items-center font-mono text-sm text-ink/60">
-      <span class="text-ink font-normal hover:font-black hover:scale-110 inline-block cursor-pointer transition-all duration-200">IV.</span>
-      <div class="flex gap-8">
-        <a href="#about" class="hover:text-garnet cursor-pointer">Sobre mi</a>
-        <a href="#stack" class="hover:text-garnet cursor-pointer">Stack</a>
-        <a href="#projects" class="hover:text-garnet cursor-pointer">Proyectos</a>
-        <a href="#contact" class="hover:text-garnet cursor-pointer">Contactame</a>
-      </div>
+<div id="navbar" class="navbar-wrap fixed top-0 inset-x-0 z-40 h-[76px] is-dark">
+  <nav class="relative h-full px-8 md:px-16 flex items-center justify-between font-mono text-sm">
+    <a href="/" class="font-bold text-lg hover:scale-110 inline-block transition-transform duration-200 no-underline text-current">
+      IV<span class="text-garnet-bright">.</span>
+    </a>
+    <div class="flex gap-6 md:gap-8">
+      <a
+        href="/sobre-mi"
+        class:list={[
+          'hover:text-garnet-bright transition-colors no-underline text-current',
+          (currentPath === '/sobre-mi' || currentPath === '/sobre-mi/') && 'text-garnet-bright font-bold',
+        ]}
+      >
+        Sobre mí
+      </a>
+      <a
+        href="/stack"
+        class:list={[
+          'hover:text-garnet-bright transition-colors no-underline text-current',
+          (currentPath === '/stack' || currentPath === '/stack/') && 'text-garnet-bright font-bold',
+        ]}
+      >
+        Stack
+      </a>
+      <a
+        href="/proyectos"
+        class:list={[
+          'hover:text-garnet-bright transition-colors no-underline text-current',
+          (currentPath === '/proyectos' || currentPath === '/proyectos/') && 'text-garnet-bright font-bold',
+        ]}
+      >
+        Proyectos
+      </a>
+      <a
+        href="/contacto"
+        class:list={[
+          'hover:text-garnet-bright transition-colors no-underline text-current',
+          (currentPath === '/contacto' || currentPath === '/contacto/') && 'text-garnet-bright font-bold',
+        ]}
+      >
+        Contacto
+      </a>
     </div>
   </nav>
 </div>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function setupNavbar() {
+    const navbar = document.getElementById('navbar');
+    const aboutSection = document.getElementById('about-section');
+    if (!navbar) return;
+
+    if (!aboutSection) {
+      navbar.classList.remove('is-light');
+      navbar.classList.add('is-dark');
+      return;
+    }
+
+    ScrollTrigger.create({
+      trigger: aboutSection,
+      start: 'top 10%',
+      end: 'bottom 10%',
+      onEnter: () => {
+        navbar.classList.remove('is-dark');
+        navbar.classList.add('is-light');
+      },
+      onLeave: () => {
+        navbar.classList.remove('is-light');
+        navbar.classList.add('is-dark');
+      },
+      onEnterBack: () => {
+        navbar.classList.remove('is-dark');
+        navbar.classList.add('is-light');
+      },
+      onLeaveBack: () => {
+        navbar.classList.remove('is-light');
+        navbar.classList.add('is-dark');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupNavbar);
+  } else {
+    setupNavbar();
+  }
+  document.addEventListener('astro:page-load', setupNavbar);
+</script>
