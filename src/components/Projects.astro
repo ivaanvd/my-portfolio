@@ -7,7 +7,7 @@ const projects = await getCollection('projects');
 
 <section
   id="projects-section"
-  class="bg-ink text-white min-h-dvh px-6 md:px-16 pt-28 pb-32 relative overflow-hidden"
+  class="bg-ink text-white min-h-dvh px-6 md:px-16 pt-20 md:pt-28 pb-24 md:pb-32 relative overflow-hidden"
 >
   <div id="projects-header" class="text-center mb-12 max-w-2xl mx-auto overflow-hidden">
     <p class="font-mono text-xs text-garnet-bright tracking-widest uppercase mb-4 font-semibold reveal-clip">
@@ -20,28 +20,28 @@ const projects = await getCollection('projects');
   </div>
 
   <!-- CATEGORY FILTER TABS -->
-  <div id="project-filter-tabs" class="flex flex-wrap items-center justify-center gap-3 mb-16 font-mono text-xs">
+  <div id="project-filter-tabs" class="flex flex-wrap items-center justify-center gap-2 mb-10 md:mb-16 font-mono text-[10px] md:text-xs">
     <button
       data-filter="all"
-      class="filter-btn active px-4 py-2 rounded-full border border-garnet-bright bg-garnet text-white cursor-pointer transition-all duration-200"
+      class="filter-btn active px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-garnet-bright bg-garnet text-white cursor-pointer transition-all duration-200"
     >
       Todos (4)
     </button>
     <button
       data-filter="fullstack"
-      class="filter-btn px-4 py-2 rounded-full border border-white/10 bg-white/5 text-white/70 hover:border-white/30 hover:text-white cursor-pointer transition-all duration-200"
+      class="filter-btn px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 bg-white/5 text-white/70 hover:border-white/30 hover:text-white cursor-pointer transition-all duration-200"
     >
       Full Stack
     </button>
     <button
       data-filter="frontend"
-      class="filter-btn px-4 py-2 rounded-full border border-white/10 bg-white/5 text-white/70 hover:border-white/30 hover:text-white cursor-pointer transition-all duration-200"
+      class="filter-btn px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 bg-white/5 text-white/70 hover:border-white/30 hover:text-white cursor-pointer transition-all duration-200"
     >
       Frontend
     </button>
     <button
       data-filter="movil"
-      class="filter-btn px-4 py-2 rounded-full border border-white/10 bg-white/5 text-white/70 hover:border-white/30 hover:text-white cursor-pointer transition-all duration-200"
+      class="filter-btn px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 bg-white/5 text-white/70 hover:border-white/30 hover:text-white cursor-pointer transition-all duration-200"
     >
       Móvil & Robótica
     </button>
