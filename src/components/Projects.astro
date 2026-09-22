@@ -25,7 +25,7 @@ const projects = await getCollection('projects');
       data-filter="all"
       class="filter-btn active px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-garnet-bright bg-garnet text-white cursor-pointer transition-all duration-200"
     >
-      Todos (4)
+      Todos ({projects.length})
     </button>
     <button
       data-filter="fullstack"
@@ -49,7 +49,7 @@ const projects = await getCollection('projects');
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16 max-w-6xl mx-auto project-card-container">
     {
-      projects.map(({ data: { id, num, title, category, description, tags } }, index) => (
+      projects.map(({ data: { id, num, title, category, description, tags, image } }, index) => (
         <a
           href={`/proyectos/${id}`}
           class:list={[
@@ -68,11 +68,26 @@ const projects = await getCollection('projects');
               <span class="font-mono text-[10px] text-white/40 uppercase">PROJECT_{num}</span>
             </div>
 
-            <div class="flex flex-col items-center justify-center h-[calc(100%-42px)] p-6 bg-gradient-to-br from-white/5 to-transparent text-center">
-              <span class="font-display font-black text-4xl md:text-5xl text-white/10 group-hover:text-garnet-bright/30 transition-colors duration-300">
-                {num}
-              </span>
-              <p class="font-mono text-xs text-white/40 mt-2">{title.toUpperCase()}</p>
+            <!-- Pantalla: la imagen va encima del relleno; si falla, se queda el relleno -->
+            <div class="relative h-[calc(100%-42px)] overflow-hidden bg-black">
+              <div class="absolute inset-0 flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white/5 to-transparent text-center">
+                <span class="font-display font-black text-4xl md:text-5xl text-white/10 group-hover:text-garnet-bright/30 transition-colors duration-300">
+                  {num}
+                </span>
+                <p class="font-mono text-xs text-white/40 mt-2">{title.toUpperCase()}</p>
+              </div>
+
+              {image && (
+                <img
+                  src={image}
+                  alt={`Vista previa de ${title}`}
+                  loading={index < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  draggable="false"
+                  class="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+                  onerror="this.style.display='none'"
+                />
+              )}
             </div>
           </div>
 

@@ -1,20 +1,18 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ScreenCarousel from '../../components/Screencarousel.astro';
+import VideoModal from '../../components/VideoModal.astro';
 import { getCollection } from 'astro:content';
-import { 
-  ArrowLeft, 
-  ExternalLink, 
-  Users, 
-  Calendar, 
-  Building2, 
-  Layers, 
-  Check, 
-  CodeXml, 
+import {
+  ArrowLeft,
+  Users,
+  Calendar,
+  Building2,
+  Layers,
+  Check,
   ArrowRight,
   Monitor,
-  FileText,
-  ChevronLeft,
-  ChevronRight
+  FileText
 } from '@lucide/astro';
 
 export async function getStaticPaths() {
@@ -26,30 +24,38 @@ export async function getStaticPaths() {
 }
 
 const { project, allProjects } = Astro.props;
-const { 
-  num, 
-  title, 
-  subtitle, 
-  category, 
-  fullDescription, 
-  authors, 
-  year, 
-  institution, 
-  architecture, 
-  features, 
-  tags, 
-  repoUrl, 
-  demoUrl,
+const {
+  num,
+  title,
+  subtitle,
+  category,
+  fullDescription,
+  authors,
+  year,
+  institution,
+  architecture,
+  features,
+  tags,
+  repoUrl,
+  demoVideo,
   documentationUrl,
-  images = []
+  imagesWeb = [],
+  imagesMobile = []
 } = project.data;
 
-// Default slide placeholders if user hasn't added custom images yet
-const carouselSlides = images.length > 0 ? images : [
-  { id: 1, label: "CAPTURA 01 — VISTA PRINCIPAL DE LA APLICACIÓN" },
-  { id: 2, label: "CAPTURA 02 — DASHBOARD & ANALÍTICA DE DATOS" },
-  { id: 3, label: "CAPTURA 03 — INTERFAZ MÓVIL & ACCESIBILIDAD" }
-];
+const hasWeb = imagesWeb.length > 0;
+const hasMobile = imagesMobile.length > 0;
+
+// Pantalla del ordenador:
+//  - con capturas web            -> se muestran
+//  - sin web pero con móvil      -> no se muestra el ordenador (solo el móvil)
+//  - sin ninguna captura         -> 3 placeholders para no dejar la página vacía
+const webSlides: (string | null)[] = hasWeb
+  ? imagesWeb
+  : hasMobile
+    ? []
+    : [null, null, null];
+const showMonitor = webSlides.length > 0;
 
 // Find next and previous projects for bottom navigation
 const currentIndex = allProjects.findIndex((p) => p.data.id === project.data.id);
@@ -59,7 +65,7 @@ const nextProject = allProjects[(currentIndex + 1) % allProjects.length];
 
 <Layout title={`${title} — Proyecto Iván Vayad`}>
   <main class="min-h-dvh bg-ink text-white pt-28 pb-32 px-6 md:px-16 max-w-6xl mx-auto overflow-hidden">
-    
+
     <!-- BACK BUTTON -->
     <div class="mb-8">
       <a
@@ -91,7 +97,7 @@ const nextProject = allProjects[(currentIndex + 1) % allProjects.length];
           </p>
         </div>
 
-        <!-- ACTION BUTTONS: GITHUB, DOCUMENTATION, LIVE DEMO -->
+        <!-- ACTION BUTTONS: GITHUB, DOCUMENTATION, VIDEO DEMO (opcional) -->
         <div class="flex flex-wrap items-center gap-3 shrink-0">
           <a
             href={repoUrl}
@@ -117,120 +123,79 @@ const nextProject = allProjects[(currentIndex + 1) % allProjects.length];
             Ver Documentación
           </a>
 
-          <a
-            href={demoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider bg-garnet hover:bg-garnet-bright text-white px-5 py-3 rounded-lg transition-all duration-200 no-underline shadow-lg shadow-garnet/40"
-          >
-            <ExternalLink size={16} />
-            Demo en Vivo
-          </a>
+          {demoVideo && <VideoModal src={demoVideo} title={title} />}
         </div>
       </div>
     </header>
 
-    <!-- COMPUTER MONITOR MOCKUP WITH CAROUSEL -->
-    <div id="project-banner" class="relative max-w-5xl mx-auto mb-16 group">
-      <!-- Laptop Screen Frame Container -->
-      <div class="relative rounded-2xl bg-ink-2 border border-white/15 overflow-hidden shadow-2xl">
-        
-        <!-- Browser Top Bar -->
-        <div class="flex items-center justify-between px-4 py-3 bg-black/80 border-b border-white/10 font-mono text-xs text-white/40">
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
-            <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
-            <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
-          </div>
+    <!-- DEVICES SHOWCASE: ordenador (capturas web) + móvil (solo si hay capturas móvil) -->
+    <div
+      id="project-banner"
+      class="relative max-w-5xl mx-auto mb-16 flex flex-col lg:flex-row items-center lg:items-end justify-center gap-10 lg:gap-12"
+    >
 
-          <div class="flex items-center gap-2 bg-white/5 border border-white/10 rounded-md px-4 py-1 text-[11px] text-white/60 max-w-md w-full justify-center truncate font-mono">
-            <span>https://</span>
-            <span class="text-white/90 font-medium">{demoUrl.replace(/^https?:\/\//, '')}</span>
-          </div>
+      {showMonitor && (
+        <div class="w-full min-w-0 lg:flex-1">
+          <!-- Monitor / browser frame -->
+          <div class="relative rounded-2xl bg-ink-2 border border-white/15 overflow-hidden shadow-2xl flex flex-col">
 
-          <div class="flex items-center gap-2">
-            <Monitor size={14} class="text-white/40" />
-          </div>
-        </div>
-
-        <!-- CAROUSEL SCREEN VIEWPORT -->
-        <div class="relative overflow-hidden min-h-[340px] md:min-h-[480px] bg-black">
-          
-          <!-- CAROUSEL SLIDES TRACK -->
-          <div id="carousel-track" class="flex h-full w-full transition-transform duration-500 ease-out">
-            {carouselSlides.map((slide, idx) => (
-              <div class="w-full shrink-0 h-full min-h-[340px] md:min-h-[480px] relative flex flex-col items-center justify-center p-8 md:p-12 bg-gradient-to-br from-garnet/20 via-ink-2 to-black text-center select-none">
-                
-                {typeof slide === 'string' ? (
-                  /* Real image element when path provided */
-                  <img
-                    src={slide}
-                    alt={`${title} screenshot ${idx + 1}`}
-                    class="absolute inset-0 w-full h-full object-cover"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                  />
-                ) : null}
-
-                {/* Slide Card Content / Fallback visual design */}
-                <div class="slide-fallback flex flex-col items-center justify-center relative z-10 max-w-xl mx-auto">
-                  <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#9B111E_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
-
-                  <div class="w-16 h-16 rounded-2xl bg-garnet/30 border border-garnet-bright flex items-center justify-center mx-auto mb-6 shadow-lg shadow-garnet/40">
-                    <CodeXml size={32} class="text-garnet-bright" />
-                  </div>
-
-                  <span class="font-mono text-xs uppercase tracking-widest text-garnet-bright bg-garnet/20 border border-garnet-dim px-3 py-1 rounded-full mb-3 inline-block font-semibold">
-                    {typeof slide === 'object' ? slide.label : `CAPTURA 0${idx + 1} — CAPTURA DE PANTALLA`}
-                  </span>
-
-                  <p class="font-mono text-xs text-white/50 max-w-md leading-relaxed">
-                    [ Galería interactiva del proyecto — Desliza o usa los controles para cambiar de captura ]
-                  </p>
-                </div>
+            <!-- Browser Top Bar -->
+            <div class="flex items-center justify-between px-4 py-3 bg-black/80 border-b border-white/10 font-mono text-xs text-white/40 shrink-0">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+                <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+                <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
               </div>
-            ))}
+
+              <div class="flex items-center gap-2 bg-white/5 border border-white/10 rounded-md px-4 py-1 text-[11px] text-white/90 font-medium max-w-md w-full justify-center truncate font-mono">
+                {title}
+              </div>
+
+              <div class="flex items-center gap-2">
+                <Monitor size={14} class="text-white/40" />
+              </div>
+            </div>
+
+            <!-- Área de la pantalla del monitor -->
+            <div class="w-full relative overflow-hidden bg-black">
+              <ScreenCarousel slides={webSlides} alt={title} variant="web" fit="cover" />
+            </div>
           </div>
 
-          <!-- CAROUSEL ARROW CONTROLS -->
-          <button
-            id="carousel-prev"
-            class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-garnet hover:border-garnet-bright transition-all cursor-pointer shadow-lg backdrop-blur-sm"
-            aria-label="Captura anterior"
-          >
-            <ChevronLeft size={20} />
-          </button>
+          <!-- Stand / base -->
+          <div class="h-3 bg-gradient-to-b from-white/20 to-white/5 rounded-b-xl w-3/4 mx-auto border-t border-white/10 shadow-lg"></div>
+        </div>
+      )}
 
-          <button
-            id="carousel-next"
-            class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-garnet hover:border-garnet-bright transition-all cursor-pointer shadow-lg backdrop-blur-sm"
-            aria-label="Siguiente captura"
-          >
-            <ChevronRight size={20} />
-          </button>
+      {hasMobile && (
+        <div class="shrink-0 w-[200px] sm:w-[230px]">
+          <!-- Phone frame -->
+          <div class="relative rounded-[2.5rem] bg-ink-2 border border-white/15 p-2.5 shadow-2xl">
+            <!-- Botones laterales -->
+            <span class="absolute -left-[3px] top-20 w-[3px] h-8 rounded-l bg-white/20 pointer-events-none"></span>
+            <span class="absolute -left-[3px] top-32 w-[3px] h-12 rounded-l bg-white/20 pointer-events-none"></span>
+            <span class="absolute -right-[3px] top-28 w-[3px] h-16 rounded-r bg-white/20 pointer-events-none"></span>
 
-          <!-- CAROUSEL BOTTOM INDICATORS -->
-          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 border border-white/10 backdrop-blur-sm">
-            {carouselSlides.map((_, idx) => (
-              <button
-                class="carousel-dot w-2.5 h-2.5 rounded-full bg-white/30 hover:bg-white transition-all cursor-pointer"
-                data-index={idx}
-                aria-label={`Ir a la captura ${idx + 1}`}
-              ></button>
-            ))}
+            <div class="relative rounded-[2rem] overflow-hidden bg-black border border-white/10">
+              <!-- Notch / dynamic island -->
+              <div class="absolute top-2 left-1/2 -translate-x-1/2 z-30 w-16 h-4 rounded-full bg-black border border-white/10 pointer-events-none"></div>
+
+              <ScreenCarousel slides={imagesMobile} alt={`${title} (móvil)`} variant="mobile" fit="cover" />
+
+              <!-- Home indicator -->
+              <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 z-30 w-20 h-1 rounded-full bg-white/40 pointer-events-none"></div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Laptop Stand / Base Styling -->
-      <div class="h-3 bg-gradient-to-b from-white/20 to-white/5 rounded-b-xl w-3/4 mx-auto border-t border-white/10 shadow-lg"></div>
+      )}
     </div>
 
     <!-- MAIN CONTENT GRID -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-      
+
       <!-- LEFT / MAIN COL (2 COLS) -->
       <div class="lg:col-span-2 space-y-14">
-        
+
         <!-- DESCRIPTION SECTION -->
         <section class="space-y-4">
           <h2 class="font-serif font-bold text-2xl md:text-3xl text-white flex items-center gap-3">
@@ -286,7 +251,7 @@ const nextProject = allProjects[(currentIndex + 1) % allProjects.length];
 
       <!-- RIGHT SIDEBAR COL (1 COL) -->
       <aside class="space-y-8 lg:sticky lg:top-28">
-        
+
         <!-- METADATA CARD -->
         <div class="bg-ink-2 border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
           <h3 class="font-mono text-xs text-garnet-bright uppercase tracking-widest font-semibold border-b border-white/10 pb-4">
@@ -388,35 +353,62 @@ const nextProject = allProjects[(currentIndex + 1) % allProjects.length];
 <script>
   import { gsap } from 'gsap';
 
-  function initCarouselAndAnimations() {
-    const header = document.getElementById('project-header');
-    const banner = document.getElementById('project-banner');
+  type CarouselApi = { root: HTMLElement; next: () => void; prev: () => void };
 
-    if (header && banner) {
-      gsap.fromTo(
-        [header, banner],
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out' }
-      );
-    }
+  const carousels: CarouselApi[] = [];
+  let activeRoot: HTMLElement | null = null;
+  let keyboardBound = false;
 
-    // --- CAROUSEL LOGIC ---
-    const track = document.getElementById('carousel-track');
-    const prevBtn = document.getElementById('carousel-prev');
-    const nextBtn = document.getElementById('carousel-next');
-    const dots = document.querySelectorAll('.carousel-dot');
-
+  function setupCarousel(root: HTMLElement) {
+    const track = root.querySelector<HTMLElement>('[data-carousel-track]');
     if (!track) return;
 
-    const slidesCount = dots.length;
-    let currentIndex = 0;
+    const count = track.children.length;
+    if (count === 0) return;
 
-    function updateCarousel() {
-      if (!track) return;
-      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    const dots = Array.from(root.querySelectorAll<HTMLElement>('[data-carousel-dot]'));
+    const prevBtn = root.querySelector('[data-carousel-prev]');
+    const nextBtn = root.querySelector('[data-carousel-next]');
+    let index = 0;
 
-      dots.forEach((dot, idx) => {
-        if (idx === currentIndex) {
+    // --- Ajuste de la pantalla a la proporción de la captura ---
+    const isMobile = root.dataset.variant === 'mobile';
+    // Límites para que una captura extrema (p. ej. página completa muy larga)
+    // no deforme el dispositivo. Ajusta a tu gusto (ancho / alto).
+    const [minRatio, maxRatio] = isMobile ? [0.42, 0.8] : [1, 2.4];
+
+    const slideImgs = Array.from(track.children).map(
+      (slide) => slide.querySelector<HTMLImageElement>('img')
+    );
+
+    let firstFit = true;
+    function fitToSlide() {
+      const img = slideImgs[index];
+      if (!img || !img.naturalWidth || !img.naturalHeight) return; // placeholder o imagen rota: se queda el ratio por defecto
+
+      const ratio = Math.min(maxRatio, Math.max(minRatio, img.naturalWidth / img.naturalHeight));
+
+      if (firstFit) root.style.transition = 'none'; // sin animar el primer ajuste
+      root.style.aspectRatio = String(ratio);
+      if (firstFit) {
+        void root.offsetHeight; // fuerza reflow antes de restaurar la transición
+        root.style.transition = '';
+        firstFit = false;
+      }
+    }
+
+    slideImgs.forEach((img, i) => {
+      img?.addEventListener('load', () => {
+        if (i === index) fitToSlide();
+      });
+    });
+    // --- fin del ajuste ---
+
+    function render() {
+      track!.style.transform = `translateX(-${index * 100}%)`;
+
+      dots.forEach((dot, i) => {
+        if (i === index) {
           dot.classList.remove('bg-white/30', 'w-2.5');
           dot.classList.add('bg-garnet-bright', 'w-6');
         } else {
@@ -424,47 +416,97 @@ const nextProject = allProjects[(currentIndex + 1) % allProjects.length];
           dot.classList.add('bg-white/30', 'w-2.5');
         }
       });
+
+      fitToSlide();
     }
 
-    prevBtn?.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + slidesCount) % slidesCount;
-      updateCarousel();
-    });
+    function go(i: number) {
+      index = (i + count) % count;
+      render();
+    }
 
-    nextBtn?.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % slidesCount;
-      updateCarousel();
-    });
+    const api: CarouselApi = {
+      root,
+      next: () => go(index + 1),
+      prev: () => go(index - 1),
+    };
+    carousels.push(api);
 
+    prevBtn?.addEventListener('click', api.prev);
+    nextBtn?.addEventListener('click', api.next);
     dots.forEach((dot) => {
       dot.addEventListener('click', () => {
-        const idx = Number(dot.getAttribute('data-index'));
-        if (!isNaN(idx)) {
-          currentIndex = idx;
-          updateCarousel();
-        }
+        const i = Number(dot.getAttribute('data-index'));
+        if (!Number.isNaN(i)) go(i);
       });
     });
 
-    // Keyboard Arrow Keys
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') {
-        currentIndex = (currentIndex - 1 + slidesCount) % slidesCount;
-        updateCarousel();
-      } else if (e.key === 'ArrowRight') {
-        currentIndex = (currentIndex + 1) % slidesCount;
-        updateCarousel();
-      }
+    // El teclado controla el carrusel sobre el que estés (o el último que tocaste)
+    const markActive = () => { activeRoot = root; };
+    root.addEventListener('pointerenter', markActive);
+    root.addEventListener('focusin', markActive);
+    root.addEventListener('click', markActive);
+
+    // Swipe táctil
+    let startX = 0;
+    root.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+    root.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) < 40) return;
+      if (dx < 0) api.next();
+      else api.prev();
     });
 
-    // Initial update
-    updateCarousel();
+    render();
+  }
+
+  function bindKeyboard() {
+    if (keyboardBound) return;
+    keyboardBound = true;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      if (document.querySelector('dialog[open]')) return; // modal abierto: no mover el carrusel
+
+      const live = carousels.filter((c) => c.root.isConnected);
+      const target = live.find((c) => c.root === activeRoot) ?? live[0];
+      if (!target) return;
+
+      if (e.key === 'ArrowLeft') target.prev();
+      else target.next();
+    });
+  }
+
+  function init() {
+    // Limpia carruseles de páginas anteriores (navegación con View Transitions)
+    for (let i = carousels.length - 1; i >= 0; i--) {
+      if (!carousels[i].root.isConnected) carousels.splice(i, 1);
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+      if (root.dataset.ready) return;
+      root.dataset.ready = 'true';
+      setupCarousel(root);
+    });
+
+    bindKeyboard();
+
+    const header = document.getElementById('project-header');
+    const banner = document.getElementById('project-banner');
+    if (header && banner && !header.dataset.animated) {
+      header.dataset.animated = 'true';
+      gsap.fromTo(
+        [header, banner],
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out' }
+      );
+    }
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCarouselAndAnimations);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    initCarouselAndAnimations();
+    init();
   }
-  document.addEventListener('astro:page-load', initCarouselAndAnimations);
+  document.addEventListener('astro:page-load', init);
 </script>

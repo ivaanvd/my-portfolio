@@ -1,0 +1,132 @@
+---
+/**
+ * Carrusel de capturas reutilizable.
+ * - variant "web"    -> proporción 16:10, para la pantalla del ordenador
+ * - variant "mobile" -> proporción 9:19.5, para la pantalla del móvil
+ */
+import { ChevronLeft, ChevronRight, CodeXml } from '@lucide/astro';
+
+interface Props {
+  slides: (string | null)[];
+  alt: string;
+  variant?: 'web' | 'mobile';
+  fit?: 'cover' | 'contain';
+}
+
+const { slides, alt, variant = 'web', fit = 'cover' } = Astro.props;
+const isMobile = variant === 'mobile';
+const multiple = slides.length > 1;
+---
+
+<div
+  data-carousel
+  data-variant={variant}
+  style={`aspect-ratio: ${isMobile ? '9 / 19.5' : '16 / 10'}`}
+  class="relative w-full overflow-hidden bg-black transition-[aspect-ratio] duration-500 ease-out motion-reduce:transition-none"
+>
+  <!-- TRACK -->
+  <div
+    data-carousel-track
+    class="flex h-full w-full transition-transform duration-500 ease-out motion-reduce:transition-none"
+  >
+    {slides.map((src, idx) => (
+      <div class="relative h-full w-full shrink-0 select-none bg-black/90 flex items-center justify-center">
+        {src && (
+          <img
+            src={src}
+            alt={`${alt} — captura ${idx + 1}`}
+            loading={idx === 0 ? 'eager' : 'lazy'}
+            draggable="false"
+            class:list={[
+              'w-full h-full pointer-events-none',
+              fit === 'cover' ? 'object-cover object-top' : 'object-contain object-center',
+            ]}
+            onerror="this.style.display='none'; var f=this.nextElementSibling; if (f) { f.classList.remove('hidden'); f.classList.add('flex'); }"
+          />
+        )}
+
+        <!-- Relleno: visible si no hay imagen o si la imagen falla -->
+        <div
+          class:list={[
+            'slide-fallback absolute inset-0 flex-col items-center justify-center text-center bg-gradient-to-br from-garnet/20 via-ink-2 to-black',
+            src ? 'hidden' : 'flex',
+            isMobile ? 'p-6' : 'p-8 md:p-12',
+          ]}
+        >
+          <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#9B111E_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+
+          <div
+            class:list={[
+              'relative rounded-2xl bg-garnet/30 border border-garnet-bright flex items-center justify-center shadow-lg shadow-garnet/40',
+              isMobile ? 'w-12 h-12 mb-4' : 'w-16 h-16 mb-6',
+            ]}
+          >
+            <CodeXml size={isMobile ? 24 : 32} class="text-garnet-bright" />
+          </div>
+
+          <span
+            class:list={[
+              'relative font-mono uppercase tracking-widest text-garnet-bright bg-garnet/20 border border-garnet-dim rounded-full inline-block font-semibold',
+              isMobile ? 'text-[10px] px-2.5 py-1' : 'text-xs px-3 py-1 mb-3',
+            ]}
+          >
+            Captura 0{idx + 1}
+          </span>
+
+          {!isMobile && (
+            <p class="relative font-mono text-xs text-white/50 max-w-md leading-relaxed">
+              [ Galería interactiva del proyecto — usa los controles para cambiar de captura ]
+            </p>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {multiple && (
+    <>
+      <!-- FLECHAS -->
+      <button
+        type="button"
+        data-carousel-prev
+        class:list={[
+          'absolute top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-garnet hover:border-garnet-bright transition-all cursor-pointer shadow-lg backdrop-blur-sm',
+          isMobile ? 'left-2 w-8 h-8' : 'left-4 w-11 h-11',
+        ]}
+        aria-label="Captura anterior"
+      >
+        <ChevronLeft size={isMobile ? 16 : 20} />
+      </button>
+
+      <button
+        type="button"
+        data-carousel-next
+        class:list={[
+          'absolute top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-garnet hover:border-garnet-bright transition-all cursor-pointer shadow-lg backdrop-blur-sm',
+          isMobile ? 'right-2 w-8 h-8' : 'right-4 w-11 h-11',
+        ]}
+        aria-label="Siguiente captura"
+      >
+        <ChevronRight size={isMobile ? 16 : 20} />
+      </button>
+
+      <!-- INDICADORES -->
+      <div
+        class:list={[
+          'absolute left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 border border-white/10 backdrop-blur-sm',
+          isMobile ? 'bottom-4' : 'bottom-4',
+        ]}
+      >
+        {slides.map((_, idx) => (
+          <button
+            type="button"
+            data-carousel-dot
+            data-index={idx}
+            class="w-2.5 h-2.5 rounded-full bg-white/30 hover:bg-white transition-all cursor-pointer"
+            aria-label={`Ir a la captura ${idx + 1}`}
+          ></button>
+        ))}
+      </div>
+    </>
+  )}
+</div>

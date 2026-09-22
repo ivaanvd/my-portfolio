@@ -31,10 +31,9 @@
       "Arquitectura Hexagonal"
     ],
     "repoUrl": "https://github.com/tu-usuario/geoada-eina",
-    "demoUrl": "https://geoada.eina.unizar.es",
     "documentationUrl": "/informe_GeoAda.pdf",
     "image": "/images/projects/geoada_preview.png",
-    "images": [
+    "imagesWeb": [
       "/images/projects/geoada_1.png",
       "/images/projects/geoada_2.png",
       "/images/projects/geoada_3.png"
@@ -48,7 +47,12 @@
     "category": "fullstack",
     "description": "Plataforma geoespacial de análisis de seguridad pública para el Condado de Montgomery con mapas en tiempo real y estadísticas policiales.",
     "fullDescription": "Montgomery SafetyMap es una solución tecnológica avanzada desarrollada para transformar datos brutos de incidentes delictivos en inteligencia geoespacial útil tanto para las fuerzas de seguridad pública (Policía del Condado de Montgomery) como para la ciudadanía. Ofrece herramientas de análisis temporal, mapas de densidad de delitos por Sectores y Beats, y un portal público de concienciación y prevención.",
-    "authors": ["Iván Vayad Díaz y equipo de desarrollo"],
+    "authors": [
+      "Iván Vayad Díaz",
+      "Lucía Vázquez Martín",
+      "Luna Zhou Chen",
+      "Ariana Porroche Llorén"
+    ],
     "year": "2026",
     "institution": "Universidad de Zaragoza",
     "architecture": [
@@ -72,13 +76,15 @@
       "Spatial Analytics"
     ],
     "repoUrl": "https://github.com/tu-usuario/montgomery-safetymap",
-    "demoUrl": "https://montgomery-safetymap.demo.com",
+    "demoVideo": "/videos/montgomery-demo.mp4",
     "documentationUrl": "/informe_Mongomery.pdf",
-    "image": "/images/projects/montgomery_preview.png",
-    "images": [
-      "/images/projects/montgomery_1.png",
-      "/images/projects/montgomery_2.png",
-      "/images/projects/montgomery_3.png"
+    "image": "/photos/montgomery/image.png",
+    "imagesWeb": [
+      "/photos/montgomery/montgomery-one.png",
+      "/photos/montgomery/montgomery-two.png",
+      "/photos/montgomery/montgomery-three.png",
+      "/photos/montgomery/montgomery-four.png",
+      "/photos/montgomery/montgomery-five.png"
     ]
   },
   {
@@ -111,14 +117,22 @@
       "Robotics",
       "HCI / Accessibility"
     ],
-    "repoUrl": "https://github.com/tu-usuario/sanbot-vitalia",
-    "demoUrl": "https://vitalia-robot.demo.com",
+    "repoUrl": "https://github.com/ivaanvd/DCU-vitalia",
+    "demoVideo": "/videos/VITALIA_DEMO.mp4",
     "documentationUrl": "/informe_vitalia.pdf",
-    "image": "/images/projects/sanbot_preview.png",
-    "images": [
-      "/images/projects/sanbot_1.png",
-      "/images/projects/sanbot_2.png",
-      "/images/projects/sanbot_3.png"
+    "image": "/photos/vitalia/vitalia-main.png",
+    "imagesWeb": [
+      "/photos/vitalia/vitalia-1.png",
+      "/photos/vitalia/vitalia-2.png",
+      "/photos/vitalia/vitalia-3.png",
+      "/photos/vitalia/vitalia-4.png",
+      "/photos/vitalia/vitalia-5.png",
+      "/photos/vitalia/vitalia-6.png",
+      "/photos/vitalia/vitalia-7.png",
+      "/photos/vitalia/vitalia-8.png",
+      "/photos/vitalia/vitalia-9.png",
+      "/photos/vitalia/vitalia-10.png",
+      "/photos/vitalia/vitalia-11.png"
     ]
   },
   {
@@ -153,15 +167,17 @@
       "Bibliotecas virtuales personalizables con etiquetas, estados de lectura y listas de deseos.",
       "Ecosistema social con clubs de lectura, comentarios en margen y valoraciones de libros."
     ],
-    "tags": ["React", "Node.js", "WebSockets", "PDF.js", "MongoDB", "Redis"],
+    "tags": ["Vue", "Node.js", "WebSockets", "PDF.js", "MongoDB", "Redis"],
     "repoUrl": "https://github.com/UNIZAR-30226-2025-60",
-    "demoUrl": "https://bookly-app.demo.com",
     "documentationUrl": "/informe_bookly.pdf",
-    "image": "/images/projects/bookly_preview.png",
-    "images": [
-      "/images/projects/bookly_1.png",
-      "/images/projects/bookly_2.png",
-      "/images/projects/bookly_3.png"
+    "image": "/photos/bookly/bookly-main.png",
+    "imagesWeb": [
+      "/photos/bookly/bookly-main.png",
+      "/photos/bookly/bookly-1.png",
+      "/photos/bookly/bookly-2.png",
+      "/photos/bookly/bookly-3.png",
+      "/photos/bookly/bookly-4.png",
+      "/photos/bookly/bookly-5.png"
     ]
   }
 ]

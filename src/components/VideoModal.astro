@@ -1,0 +1,243 @@
+---
+/**
+ * Botón + modal para reproducir un vídeo demo.
+ *
+ * Según la URL de `src` hace una cosa u otra:
+ *  - YouTube / Vimeo        -> modal con iframe
+ *  - .mp4 / .webm / .ogg    -> modal con <video> (rutas locales tipo /videos/demo.mp4 incluidas)
+ *  - cualquier otra URL     -> enlace normal que abre en pestaña nueva (no se puede incrustar)
+ *
+ * El contenido (iframe / video) se crea al abrir y se elimina al cerrar, así el vídeo
+ * se detiene siempre y no se descarga nada hasta que el usuario lo pide.
+ */
+import { Play, X, ExternalLink } from '@lucide/astro';
+
+interface Props {
+  src: string;
+  title: string;
+  id?: string;
+}
+
+const { src, title, id = 'video-modal' } = Astro.props;
+
+type Parsed = { kind: 'iframe' | 'file' | 'external'; src: string };
+
+function parseVideo(url: string): Parsed {
+  const yt = url.match(
+    /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/
+  );
+  if (yt) {
+    return {
+      kind: 'iframe',
+      src: `https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&rel=0`,
+    };
+  }
+
+  const vimeo = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vimeo) {
+    return { kind: 'iframe', src: `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1` };
+  }
+
+  if (/\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url)) {
+    return { kind: 'file', src: url };
+  }
+
+  return { kind: 'external', src: url };
+}
+
+const video = parseVideo(src.trim());
+
+const triggerClass =
+  'inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider bg-garnet hover:bg-garnet-bright text-white px-5 py-3 rounded-lg transition-all duration-200 no-underline shadow-lg shadow-garnet/40 cursor-pointer';
+---
+
+{video.kind === 'external' ? (
+  <a
+    href={video.src}
+    target="_blank"
+    rel="noopener noreferrer"
+    class={triggerClass}
+    title="Ver vídeo demostración"
+  >
+    <ExternalLink size={16} />
+    Ver Vídeo Demo
+  </a>
+) : (
+  <>
+    <button
+      type="button"
+      data-video-open={id}
+      aria-haspopup="dialog"
+      aria-controls={id}
+      class={triggerClass}
+      title="Ver vídeo demostración"
+    >
+      <Play size={16} />
+      Ver Vídeo Demo
+    </button>
+
+    <dialog
+      id={id}
+      data-video-dialog
+      data-kind={video.kind}
+      data-src={video.src}
+      aria-label={`Vídeo demo de ${title}`}
+      class="video-dialog"
+    >
+      <div class="flex items-center justify-between gap-4 border-b border-white/10 bg-black/60 px-4 py-3">
+        <span class="truncate font-mono text-xs uppercase tracking-widest text-garnet-bright">
+          // Vídeo demo — {title}
+        </span>
+
+        <button
+          type="button"
+          data-video-close
+          class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-colors hover:border-garnet-bright hover:bg-garnet"
+          aria-label="Cerrar vídeo"
+        >
+          <X size={16} />
+        </button>
+      </div>
+
+      <!-- El iframe o el <video> se inserta aquí al abrir -->
+      <div data-video-stage class="video-stage"></div>
+    </dialog>
+  </>
+)}
+
+<style>
+  /* Posición y tamaño: CSS propio para no depender de Tailwind ni de resets globales */
+  .video-dialog {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    padding: 0;
+    width: min(92vw, 64rem);
+    height: fit-content;
+    max-height: 92dvh;
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 0.15);
+    border-radius: 1rem;
+    background: var(--color-ink-2, #141414);
+    color: #fff;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.6);
+  }
+
+  .video-dialog::backdrop {
+    background: rgb(0 0 0 / 0.8);
+    backdrop-filter: blur(4px);
+  }
+
+  .video-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+  }
+
+  /* El iframe y el <video> se crean con JS, por eso :global */
+  .video-stage :global(iframe),
+  .video-stage :global(video) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #000;
+  }
+
+  .video-dialog[open] {
+    animation: video-dialog-in 180ms ease-out;
+  }
+
+  @keyframes video-dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .video-dialog[open] {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  function openDialog(dialog: HTMLDialogElement) {
+    const stage = dialog.querySelector<HTMLElement>('[data-video-stage]');
+    const src = dialog.dataset.src;
+    if (!stage || !src) return;
+
+    stage.replaceChildren();
+
+    if (dialog.dataset.kind === 'iframe') {
+      const frame = document.createElement('iframe');
+      frame.src = src;
+      frame.title = dialog.getAttribute('aria-label') ?? 'Vídeo demo';
+      frame.allow = 'autoplay; fullscreen; picture-in-picture';
+      frame.allowFullscreen = true;
+      frame.referrerPolicy = 'strict-origin-when-cross-origin';
+      stage.append(frame);
+    } else {
+      const player = document.createElement('video');
+      player.src = src;
+      player.controls = true;
+      player.autoplay = true;
+      player.playsInline = true;
+      stage.append(player);
+    }
+
+    document.body.style.overflow = 'hidden';
+    dialog.showModal();
+  }
+
+  function resetDialog(dialog: HTMLDialogElement) {
+    // Vaciar el contenedor detiene el vídeo y libera la conexión
+    dialog.querySelector<HTMLElement>('[data-video-stage]')?.replaceChildren();
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (!target) return;
+
+    // Abrir
+    const opener = target.closest<HTMLElement>('[data-video-open]');
+    if (opener) {
+      const dialog = document.getElementById(opener.dataset.videoOpen ?? '');
+      if (dialog instanceof HTMLDialogElement) openDialog(dialog);
+      return;
+    }
+
+    // Cerrar con el botón X
+    const closer = target.closest('[data-video-close]');
+    if (closer) {
+      closer.closest('dialog')?.close();
+      return;
+    }
+
+    // Cerrar al hacer clic en el fondo oscuro
+    if (target instanceof HTMLDialogElement && target.hasAttribute('data-video-dialog')) {
+      target.close();
+    }
+  });
+
+  // "close" no burbujea, por eso se escucha en fase de captura.
+  // Se dispara con la X, con Esc y con clic en el fondo.
+  document.addEventListener(
+    'close',
+    (event) => {
+      const target = event.target;
+      if (target instanceof HTMLDialogElement && target.hasAttribute('data-video-dialog')) {
+        resetDialog(target);
+      }
+    },
+    true
+  );
+</script>

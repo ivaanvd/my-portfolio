@@ -19,10 +19,11 @@ const projects = defineCollection({
     features: z.array(z.string()),
     tags: z.array(z.string()),
     repoUrl: z.string().url(),
-    demoUrl: z.string().url(),
     documentationUrl: z.string(),
     image: z.string(),
-    images: z.array(z.string()).optional(),
+    demoVideo: z.string().optional(),
+    imagesWeb: z.array(z.string()).default([]),
+    imagesMobile: z.array(z.string()).default([]),
   }),
 });
 
