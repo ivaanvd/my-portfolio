@@ -30,13 +30,16 @@
       "PostgreSQL",
       "Arquitectura Hexagonal"
     ],
-    "repoUrl": "https://github.com/tu-usuario/geoada-eina",
+    "repoUrl": "https://github.com/UNIZAR-30249-2026-G07",
     "documentationUrl": "/informe_GeoAda.pdf",
-    "image": "/images/projects/geoada_preview.png",
+    "image": "/photos/geoada/geoada-main.jpeg",
     "imagesWeb": [
-      "/images/projects/geoada_1.png",
-      "/images/projects/geoada_2.png",
-      "/images/projects/geoada_3.png"
+      "/photos/geoada/geoada-main.jpeg",
+      "/photos/geoada/geoada-1.png",
+      "/photos/geoada/geoada-2.png",
+      "/photos/geoada/geoada-3.png",
+      "/photos/geoada/geoada-4.png",
+      "/photos/geoada/geoada-5.png"
     ]
   },
   {
