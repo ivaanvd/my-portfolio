@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import Analytics from '@vercel/analytics/astro';
 import NavBar from '../components/NavBar.astro';
 import MorphBox from '../components/MorphBox.astro';
 import { ClientRouter } from 'astro:transitions';
@@ -14,6 +15,7 @@ const { title = "Iván Vayad — Software Engineer" } = Astro.props;
 <html lang="es">
 	<head>
 		<meta charset="utf-8" />
+		<Analytics />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
